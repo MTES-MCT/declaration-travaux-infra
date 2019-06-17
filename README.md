@@ -1,6 +1,6 @@
-# Déclaration travaux INFRA
+# RIEAU INFRA
 
-> Infrastructure de déploiement de Déclaration préalable de travaux
+> Infrastructure de déploiement de RIEAU
 
 ## Développement
 
