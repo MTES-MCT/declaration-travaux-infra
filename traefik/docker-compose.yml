@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v1.7.12-alpine
+    environment:
+      TZ: Europe/Paris
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - ./traefik.toml:/traefik.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certs/:/certs/
+    networks:
+      web:
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.domain=traefik.rieau.fr'
+      - 'traefik.docker.network=web'
+      - 'traefik.frontend.rule=Host:traefik.rieau.fr'
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.backend=traefik"
+      - "traefik.port=8080"

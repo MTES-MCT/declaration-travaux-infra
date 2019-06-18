@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+
+  keycloak-gatekeeper:
+    image: hackinglab/keycloak-gatekeeper:latest
+    labels:
+     - "traefik.port=7681"
+     - "traefik.frontend.rule=Host:api.rieau.fr"
+     - "traefik.protocol=http"
+    networks:
+      rieau_network:
+    external_links:
+      - traefik:auth.rieau.fr
+    volumes:
+      - ./keycloak-gatekeeper.conf:/etc/keycloak-gatekeeper.conf
+    entrypoint:
+      - /opt/keycloak-gatekeeper
+      - --config=/etc/keycloak-gatekeeper.conf
+
+  api:
+    image: MTES-MCT/rieau-api
+    networks:
+      rieau_network:
+    labels:
+      - "traefik.enable=false"
+
+
+networks:
+  rieau_network:
+    external: true

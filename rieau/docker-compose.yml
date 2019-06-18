@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  api:
+    image: tristanrobert/rieau-api
+    networks:
+      rieau_network:
+    labels:
+      - "traefik.port=7681"
+      - "traefik.frontend.rule=Host:api.rieau.fr"
+      - "traefik.protocol=http"
+
+
+networks:
+  rieau_network:
+    external: true
