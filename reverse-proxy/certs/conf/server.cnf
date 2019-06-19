@@ -12,5 +12,4 @@ commonName = Certificat Applications rieau
 keyUsage=critical,digitalSignature,keyAgreement
 subjectAltName = @alt_names
 [ alt_names ]
-DNS.1 = traefik.rieau.fr
-DNS.2 = auth.rieau.fr
+DNS.1 = localhost

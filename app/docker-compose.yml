@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  app:
+    external: true
+services:
+
+  ui:
+    image: tristanrobert/rieau-ui
+    networks:
+      app:
+    ports:
+      - "3000:3000"
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=app'
+      - "traefik.port=3000"
+      - "traefik.frontend.rule=Host:rieau.fr"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.backend=ui"
+      - "traefik.protocol=http"
+
+  api:
+    image: tristanrobert/rieau-api
+    networks:
+      app:
+    ports:
+      - "5000:5000"
+    labels:
+      - 'traefik.docker.network=app'
+      - "traefik.port=5000"
+      - "traefik.frontend.rule=Host:api.rieau.fr"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.backend=api"
+      - "traefik.protocol=http"

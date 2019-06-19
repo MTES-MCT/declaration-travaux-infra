@@ -1,0 +1,19 @@
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+
+  keycloak-gatekeeper:
+    image: hackinglab/keycloak-gatekeeper:latest
+    networks:
+      web:
+    external_links:
+      - traefik:localhost:8080
+    volumes:
+      - ./keycloak-gatekeeper.conf:/etc/keycloak-gatekeeper.conf
+    entrypoint:
+      - /opt/keycloak-gatekeeper
+      - --config=/etc/keycloak-gatekeeper.conf

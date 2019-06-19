@@ -1,5 +1,5 @@
-keycloak/gatekeeper/*.conf
-keycloak/*.env
-traefik/certs/*.key
-traefik/certs/*.cer
-traefik/certs/*.csr
+sso/gatekeeper/*.conf
+sso/*.env
+reverse-proxy/certs/*.key
+reverse-proxy/certs/*.cer
+reverse-proxy/certs/*.csr

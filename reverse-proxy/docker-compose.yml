@@ -5,14 +5,14 @@ networks:
     external: true
 
 services:
-  traefik:
+  reverse-proxy:
     image: traefik:v1.7.12-alpine
     environment:
       TZ: Europe/Paris
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      - "7000:7000"
     restart: unless-stopped
     volumes:
       - ./traefik.toml:/traefik.toml:ro
@@ -22,9 +22,9 @@ services:
       web:
     labels:
       - 'traefik.enable=true'
-      - 'traefik.domain=traefik.rieau.fr'
+      - 'traefik.domain=localhost'
       - 'traefik.docker.network=web'
-      - 'traefik.frontend.rule=Host:traefik.rieau.fr'
+      - 'traefik.frontend.rule=Host:localhost'
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=traefik"
-      - "traefik.port=8080"
+      - "traefik.port=7000"

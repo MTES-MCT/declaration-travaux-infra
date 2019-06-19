@@ -16,22 +16,14 @@
 
 ### Dev
 
-* Déclarer dans la machine hôte de Docker les entrées DNS:
-
-```
-echo "127.0.0.1  api.rieau.fr" | sudo tee -a /etc/hosts
-echo "127.0.0.1  auth.rieau.fr" | sudo tee -a /etc/hosts
-echo "127.0.0.1  traefik.rieau.fr" | sudo tee -a /etc/hosts
-```
-
 * Créer les réseaux internes Docker:
 
 ```
 docker network create web
-docker network create rieau
+docker network create app
 ```
 
-* Générer les certificats statiques auto-signés dans le dossier `/traefik/certs`:
+* Générer les certificats statiques auto-signés (pour localhost) dans le dossier `/sso/certs`:
 
 ```
 openssl req -x509 -new -keyout root.key -out root.cer -config conf/root.cnf
@@ -45,16 +37,16 @@ openssl x509 -days 825 -req -in server.csr -CA root.cer -CAkey root.key -set_ser
 cp keycloak.env.sample keycloak.env
 ```
 
-* [Proxy Traefik](https://www.traefik.io/):
+* [Reverse Proxy Traefik](https://www.traefik.io/):
 
 ```
-docker-compose -f traefik/docker-compose.yml up -d
+docker-compose -f reverse-proxy/docker-compose.yml up -d
 ```
 
 * [SSO Keycloak](https://www.keycloak.org/):
 
 ```
-docker-compose -f keycloak/docker-compose.yml up -d --build
+docker-compose -f sso/docker-compose.yml up -d --build
 ```
 
 ### Prod

@@ -2,33 +2,32 @@ debug = true
 
 logLevel = "DEBUG"
 defaultEntryPoints = ["https","http"]
+insecureSkipVerify=true
 
 [api]
 dashboard=true
+entryPoint="api"
 
 [accessLog]
 [traefikLog]
 
 [retry]
 
-[web]
-address = ":8080"
-
 [entryPoints]
+  [entryPoints.api]
+  address = ":7000"
+
   [entryPoints.http]
   address = ":80"
-  [entryPoints.http.proxyProtocol]
-  insecure=true
     [entryPoints.http.redirect]
     entryPoint = "https"
 
   [entryPoints.https]
   address = ":443"
     [entryPoints.https.tls]
-      [entryPoints.https.tls.defaultCertificate]
+      [[entryPoints.https.tls.certificates]]
         certFile = "/certs/server.cer"
         keyFile = "/certs/server.key"
-    sniStrict = false
     minVersion = "VersionTLS12"
     cipherSuites = [
       "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
@@ -53,7 +52,11 @@ endpoint = "unix:///var/run/docker.sock"
 # [acme]
 # email = "tristan.robert.44@gmail.com"
 # storage = "acme.json"
+# caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 # entryPoint = "https"
 # onHostRule = true
 #   [acme.httpChallenge]
 #   entryPoint = "http"
+# [[acme.domains]]
+#  main = "rieau.fr"
+#  sans = ["traefik.rieau.fr","auth.rieau.fr", "api.rieau.fr"]

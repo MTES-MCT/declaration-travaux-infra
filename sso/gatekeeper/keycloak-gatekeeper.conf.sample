@@ -1,5 +1,5 @@
 # is the url for retrieve the openid configuration - normally the <server>/auth/realm/<realm_name>
-discovery-url: https://auth.rieau.fr/auth/realms/master
+discovery-url: http://localhost:8080/auth/realms/master
 # the client id for the 'client' application
 client-id: rieau-api
 # the secret associated to the 'client' application - note the client_secret is optional, required for
@@ -48,7 +48,7 @@ headers:
 # So for example, you could match the audience or the issuer or some custom attribute
 match-claims:
   aud: openvpn
-  iss: https://keycloak.example.com/auth/realms/commons
+  iss: http://localhost:8080/auth/realms/commons
 # a list of claims to inject into the authentication headers i.e. given_name -> X-Auth-Given-Name
 add-claims:
 - given_name

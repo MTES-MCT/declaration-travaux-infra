@@ -11,6 +11,8 @@ networks:
 services:
   keycloak_db:
       image: postgres:11.3-alpine
+      ports:
+        - "5432:5432"
       env_file: ./keycloak.env
       volumes:
         - keycloak_data:/var/lib/postgresql/data
@@ -27,14 +29,14 @@ services:
       depends_on:
         - keycloak_db
       ports:
-        - "8443:8443"
+        - "8080:8080"
       labels:
         - 'traefik.enable=true'
-        - 'traefik.port=8443'
-        - 'traefik.protocol=https'
-        - 'traefik.domain=auth.rieau.fr'
+        - 'traefik.port=8080'
+        - 'traefik.protocol=http'
+        - 'traefik.domain=localhost'
         - 'traefik.docker.network=web'
-        - traefik.frontend.rule=Host:auth.rieau.fr
-        - 'traefik.frontend.entryPoints=https'
+        - traefik.frontend.rule=Host:localhost
+        - 'traefik.frontend.entryPoints=http'
         - 'traefik.backend=keycloak'
       command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled"]
