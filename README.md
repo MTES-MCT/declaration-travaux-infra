@@ -34,13 +34,24 @@ openssl x509 -days 825 -req -in server.csr -CA root.cer -CAkey root.key -set_ser
 * Renseigner les variables d'environnement:
 
 ```
-cp keycloak.env.sample keycloak.env
+cp sso/keycloak.env.sample sso/keycloak.env
+cp sso/gatekeeper/keycloak-gatekeeper.conf.sample sso/gatekeeper/keycloak-gatekeeper.conf
 ```
 
 * [Reverse Proxy Traefik](https://www.traefik.io/):
 
+Configuration dans `reverse-proxy/traefik.toml`.
+
 ```
 docker-compose -f reverse-proxy/docker-compose.yml up -d
+```
+
+* [Gatekeeper SSO Keycloak](https://www.keycloak.org/):
+
+Utile pour ne pas partager le client_secret de OpenIDConnect entre keycloak et les clients.
+
+```
+docker-compose -f sso/gatekeeper/docker-compose.yml up -d
 ```
 
 * [SSO Keycloak](https://www.keycloak.org/):
