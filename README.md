@@ -11,6 +11,7 @@
 ### Dev
 
 * Docker-compose 1.24+
+* [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) 1.12+
 
 ## Déploiements
 
@@ -61,3 +62,7 @@ docker-compose -f sso/docker-compose.yml up -d --build
 ```
 
 ### Prod
+
+* Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
+
+* Déploiements des pods par [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/).
