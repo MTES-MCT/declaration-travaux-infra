@@ -22,6 +22,9 @@ services:
 
   api:
     image: tristanrobert/rieau-api
+    depends_on:
+      - db
+      - files
     networks:
       app:
     ports:
@@ -33,3 +36,35 @@ services:
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=api"
       - "traefik.protocol=http"
+
+  db:
+    image: postgres:11.4-alpine
+    networks:
+      app:
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rieau
+      POSTGRES_PASS: rieau
+      POSTGRES_DB: rieau
+    labels:
+      - 'traefik.docker.network=app'
+      - "traefik.port=5432"
+      - "traefik.backend=db"
+
+  files:
+    image: minio/minio
+    networks:
+      app:
+    restart: unless-stopped
+    command: server /data
+    ports:
+      - 9000:9000
+    environment:
+      MINIO_ACCESS_KEY: rieau
+      MINIO_SECRET_KEY: rieau
+    labels:
+      - 'traefik.docker.network=app'
+      - "traefik.port=9000"
+      - "traefik.backend=files"
