@@ -12,7 +12,7 @@ services:
   keycloak_db:
       image: postgres:11.3-alpine
       ports:
-        - "5432:5432"
+        - "5532:5532"
       env_file: ./keycloak.env
       volumes:
         - keycloak_data:/var/lib/postgresql/data
