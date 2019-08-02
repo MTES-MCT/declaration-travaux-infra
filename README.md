@@ -21,7 +21,6 @@
 
 ```
 docker network create web
-docker network create app
 ```
 
 * Générer les certificats statiques auto-signés (pour localhost) dans le dossier `/sso/certs`:
@@ -59,6 +58,12 @@ docker-compose -f sso/gatekeeper/docker-compose.yml up -d
 
 ```
 docker-compose -f sso/docker-compose.yml up -d --build
+```
+
+* App (UI+API):
+
+```
+docker-compose -f app/docker-compose.yml up -d --build
 ```
 
 ### Prod

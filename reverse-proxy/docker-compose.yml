@@ -17,14 +17,14 @@ services:
     volumes:
       - ./traefik.toml:/traefik.toml:ro
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./certs/:/certs/
+      - ./certs/:/certs/:ro
     networks:
       web:
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.domain=localhost'
-      - 'traefik.docker.network=web'
-      - 'traefik.frontend.rule=Host:localhost'
+      - "traefik.enable=true"
+      - "traefik.domain=localhost"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.rule=Host:localhost"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=traefik"
       - "traefik.port=7000"

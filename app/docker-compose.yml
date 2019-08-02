@@ -1,70 +1,84 @@
 version: '3'
 
 networks:
-  app:
+  web:
     external: true
 services:
 
   ui:
     image: tristanrobert/rieau-ui
+    environment:
+      REACT_APP_API_MOCK: "false"
+      REACT_APP_BASENAME: /
+      REACT_APP_DOMAIN: http://localhost:3000
+      REACT_APP_API_URL: http://api:5000
+      REACT_APP_SSO_APP_URL: http://localhost:8080/auth
+      REACT_APP_SSO_APP_REALM: rieau
+      REACT_APP_SSO_APP_CLIENT_ID: rieau-ui
     networks:
-      app:
+      web:
     ports:
       - "3000:3000"
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.docker.network=app'
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.port=3000"
-      - "traefik.frontend.rule=Host:rieau.fr"
+      - "traefik.frontend.rule=Host:localhost"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=ui"
       - "traefik.protocol=http"
 
   api:
     image: tristanrobert/rieau-api
+    environment:
+      MODE: staging
+      DB_URL: jdbc:postgresql://db:5432/rieau
+      DB_USER: rieau
+      DB_PASSWORD: rieau
     depends_on:
       - db
       - files
     networks:
-      app:
+      web:
     ports:
       - "5000:5000"
     labels:
-      - 'traefik.docker.network=app'
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.port=5000"
-      - "traefik.frontend.rule=Host:api.rieau.fr"
+      - "traefik.frontend.rule=Host:localhost"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=api"
       - "traefik.protocol=http"
 
   db:
-    image: postgres:11.4-alpine
+    image: postgres:10-alpine
     networks:
-      app:
+      web:
     ports:
       - "5432:5432"
     restart: unless-stopped
     environment:
-      POSTGRES_USER: rieau
-      POSTGRES_PASS: rieau
-      POSTGRES_DB: rieau
+      POSTGRES_PASS: postgres
+    volumes:
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
     labels:
-      - 'traefik.docker.network=app'
+      - "traefik.docker.network=web"
       - "traefik.port=5432"
       - "traefik.backend=db"
 
   files:
     image: minio/minio
     networks:
-      app:
+      web:
     restart: unless-stopped
     command: server /data
     ports:
       - 9000:9000
     environment:
-      MINIO_ACCESS_KEY: rieau
-      MINIO_SECRET_KEY: rieau
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
     labels:
-      - 'traefik.docker.network=app'
+      - "traefik.docker.network=web"
       - "traefik.port=9000"
       - "traefik.backend=files"
