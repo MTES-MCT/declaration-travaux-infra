@@ -24,6 +24,8 @@ services:
   keycloak:
       build: .
       env_file: ./keycloak.env
+      volumes:
+        - ./rieau-dev.json:/tmp/rieau-dev.json:ro
       networks:
         web:
       depends_on:

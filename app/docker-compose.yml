@@ -7,14 +7,7 @@ services:
 
   ui:
     image: tristanrobert/rieau-ui
-    environment:
-      REACT_APP_API_MOCK: "false"
-      REACT_APP_BASENAME: /
-      REACT_APP_DOMAIN: http://localhost:3000
-      REACT_APP_API_URL: http://api:5000
-      REACT_APP_SSO_APP_URL: http://localhost:8080/auth
-      REACT_APP_SSO_APP_REALM: rieau
-      REACT_APP_SSO_APP_CLIENT_ID: rieau-ui
+    env_file: ./app.env
     networks:
       web:
     ports:
@@ -30,11 +23,7 @@ services:
 
   api:
     image: tristanrobert/rieau-api
-    environment:
-      MODE: staging
-      DB_URL: jdbc:postgresql://db:5432/rieau
-      DB_USER: rieau
-      DB_PASSWORD: rieau
+    env_file: ./app.env
     depends_on:
       - db
       - files
@@ -58,8 +47,7 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-    environment:
-      POSTGRES_PASS: postgres
+    env_file: ./app.env
     volumes:
       - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
     labels:
@@ -69,15 +57,13 @@ services:
 
   files:
     image: minio/minio
+    env_file: ./app.env
     networks:
       web:
     restart: unless-stopped
     command: server /data
     ports:
       - 9000:9000
-    environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
     labels:
       - "traefik.docker.network=web"
       - "traefik.port=9000"
