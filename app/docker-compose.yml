@@ -1,6 +1,7 @@
 version: '3'
 
 networks:
+  app:
   web:
     external: true
 services:
@@ -8,18 +9,16 @@ services:
   ui:
     image: tristanrobert/rieau-ui
     env_file: ./app.env
+    depends_on:
+      - api
     networks:
-      web:
-    ports:
-      - "3000:3000"
+      - web
+      - app
     labels:
       - "traefik.enable=true"
+      - "traefik.backend=app"
       - "traefik.docker.network=web"
-      - "traefik.port=3000"
-      - "traefik.frontend.rule=Host:localhost"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.backend=ui"
-      - "traefik.protocol=http"
+      - "traefik.frontend.rule=Host:app.rieau.local"
 
   api:
     image: tristanrobert/rieau-api
@@ -28,43 +27,21 @@ services:
       - db
       - files
     networks:
-      web:
-    ports:
-      - "5000:5000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=web"
-      - "traefik.port=5000"
-      - "traefik.frontend.rule=Host:localhost"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.backend=api"
-      - "traefik.protocol=http"
+      - app
 
   db:
     image: postgres:10-alpine
     networks:
-      web:
-    ports:
-      - "5432:5432"
+      - app
     restart: unless-stopped
     env_file: ./app.env
     volumes:
       - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.port=5432"
-      - "traefik.backend=db"
 
   files:
     image: minio/minio
     env_file: ./app.env
     networks:
-      web:
+      - app
     restart: unless-stopped
     command: server /data
-    ports:
-      - 9000:9000
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.port=9000"
-      - "traefik.backend=files"

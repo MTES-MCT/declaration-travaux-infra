@@ -1,8 +1,9 @@
-version: '3'
+version: '3.5'
 
 networks:
   web:
-    external: true
+    driver: bridge
+    name: web
 
 services:
   reverse-proxy:
@@ -22,9 +23,6 @@ services:
       web:
     labels:
       - "traefik.enable=true"
-      - "traefik.domain=localhost"
-      - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:localhost"
-      - "traefik.frontend.entryPoints=http,https"
       - "traefik.backend=traefik"
-      - "traefik.port=7000"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.rule=Host:traefik.rieau.local"

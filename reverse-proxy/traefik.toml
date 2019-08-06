@@ -1,12 +1,7 @@
-debug = true
-
 logLevel = "DEBUG"
 defaultEntryPoints = ["https","http"]
-insecureSkipVerify=true
 
-[api]
-dashboard=true
-entryPoint="api"
+[healthcheck]
 
 [accessLog]
 [traefikLog]
@@ -14,40 +9,30 @@ entryPoint="api"
 [retry]
 
 [entryPoints]
-  [entryPoints.api]
-  address = ":7000"
-
   [entryPoints.http]
   address = ":80"
+  compress = true
     [entryPoints.http.redirect]
     entryPoint = "https"
-
   [entryPoints.https]
   address = ":443"
     [entryPoints.https.tls]
       [[entryPoints.https.tls.certificates]]
         certFile = "/certs/server.cer"
         keyFile = "/certs/server.key"
-    minVersion = "VersionTLS12"
-    cipherSuites = [
-      "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
-      "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
-      "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
-      "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
-      "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
-      "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
-      "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256"
-    ]
+  [entryPoints.traefik]
+  address = ":7000"
+
+[api]
+dashboard=true
+debug=true
+entryPoint = "traefik"
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-watch = true
 exposedbydefault = false
-swarmMode = false
-network = "web"
-
-[providers.docker]
-endpoint = "unix:///var/run/docker.sock"
+domain = "rieau.local"
+watch = true
 
 # [acme]
 # email = "tristan.robert.44@gmail.com"
@@ -58,5 +43,5 @@ endpoint = "unix:///var/run/docker.sock"
 #   [acme.httpChallenge]
 #   entryPoint = "http"
 # [[acme.domains]]
-#  main = "rieau.fr"
-#  sans = ["traefik.rieau.fr","auth.rieau.fr", "api.rieau.fr"]
+#  main = "rieau.local"
+#  sans = ["sso.rieau.local", "app.rieau.local"]

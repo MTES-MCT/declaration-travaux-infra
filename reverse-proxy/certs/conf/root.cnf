@@ -1,13 +1,18 @@
 [ req ]
 prompt             = no
-string_mask        = default
+string_mask        = utf8only
+default_md         = sha256
 default_bits       = 2048
 distinguished_name = req_distinguished_name
 x509_extensions    = x509_ext
 [ req_distinguished_name ]
 countryName = fr
 organizationName = rieau
+organizationUnit = rieau
 commonName = rieau Root CA
+emailAddress  = rieau@rieau.local
 [ x509_ext ]
-basicConstraints=critical,CA:true,pathlen:0
-keyUsage=critical,keyCertSign,cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign

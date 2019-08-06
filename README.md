@@ -17,18 +17,21 @@
 
 ### Dev
 
-* Créer les réseaux internes Docker:
+* Ajouter les domaines virtuels dans `/etc/hosts`:
 
 ```
-docker network create web
+127.0.0.1  rieau.local
+127.0.0.1  app.rieau.local
+127.0.0.1  sso.rieau.local
 ```
 
-* Générer les certificats statiques auto-signés (pour localhost) dans le dossier `/sso/certs`:
+* Générer les certificats statiques auto-signés (pour le domaine rieau.local) dans le dossier `reverse-proxy/certs`:
 
 ```
+cd reverse-proxy/certs/
 openssl req -x509 -new -keyout root.key -out root.cer -config conf/root.cnf
 openssl req -nodes -new -keyout server.key -out server.csr -config conf/server.cnf
-openssl x509 -days 825 -req -in server.csr -CA root.cer -CAkey root.key -set_serial 123 -out server.cer -extfile conf/server.cnf -extensions x509_ext
+openssl x509 -days 3650 -req -in server.csr -CA root.cer -CAkey root.key -set_serial 123 -out server.cer -extfile conf/server.cnf -extensions x509_ext
 ```
 
 * Renseigner les variables d'environnement:

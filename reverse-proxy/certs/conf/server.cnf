@@ -1,15 +1,26 @@
 [ req ]
 prompt             = no
-string_mask        = default
+string_mask        = utf8only
+default_md         = sha256
 default_bits       = 2048
 distinguished_name = req_distinguished_name
 x509_extensions    = x509_ext
 [ req_distinguished_name ]
 countryName = fr
 organizationName = rieau
+organizationUnit = rieau
 commonName = Certificat Applications rieau
+emailAddress  = rieau@rieau.local
 [ x509_ext ]
+nsCertType = server
+nsComment = "OpenSSL Generated Server Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+basicConstraints = CA:FALSE
 keyUsage=critical,digitalSignature,keyAgreement
 subjectAltName = @alt_names
 [ alt_names ]
-DNS.1 = localhost
+DNS.1 = rieau.local
+DNS.2 = *.rieau.local
