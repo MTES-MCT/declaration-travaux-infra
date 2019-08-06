@@ -46,7 +46,7 @@ cp sso/gatekeeper/keycloak-gatekeeper.conf.sample sso/gatekeeper/keycloak-gateke
 Configuration dans `reverse-proxy/traefik.toml`.
 
 ```
-docker-compose -f reverse-proxy/docker-compose.yml up -d
+docker-compose -f reverse-proxy/docker-compose.yml up -d --build
 ```
 
 * [Gatekeeper SSO Keycloak](https://www.keycloak.org/):
@@ -54,7 +54,7 @@ docker-compose -f reverse-proxy/docker-compose.yml up -d
 Utile pour ne pas partager le client_secret de OpenIDConnect entre keycloak et les clients.
 
 ```
-docker-compose -f sso/gatekeeper/docker-compose.yml up -d
+docker-compose -f sso/gatekeeper/docker-compose.yml up -d --build
 ```
 
 * [SSO Keycloak](https://www.keycloak.org/):

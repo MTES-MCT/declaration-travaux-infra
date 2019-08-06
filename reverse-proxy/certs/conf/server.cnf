@@ -8,7 +8,6 @@ x509_extensions    = x509_ext
 [ req_distinguished_name ]
 countryName = fr
 organizationName = rieau
-organizationUnit = rieau
 commonName = Certificat Applications rieau
 emailAddress  = rieau@rieau.local
 [ x509_ext ]
