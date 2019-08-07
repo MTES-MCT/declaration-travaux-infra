@@ -1,10 +1,11 @@
-logLevel = "DEBUG"
+logLevel = "INFO"
+sendAnonymousUsage = true
 defaultEntryPoints = ["https","http"]
 
 [healthcheck]
 
-[accessLog]
 [traefikLog]
+[accessLog]
 
 [retry]
 
@@ -25,13 +26,13 @@ defaultEntryPoints = ["https","http"]
 
 [api]
 dashboard=true
-debug=true
+debug=false
 entryPoint = "traefik"
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
 exposedbydefault = false
-domain = "rieau.local"
+domain = "docker.localhost"
 watch = true
 
 # [acme]
@@ -43,5 +44,4 @@ watch = true
 #   [acme.httpChallenge]
 #   entryPoint = "http"
 # [[acme.domains]]
-#  main = "rieau.local"
-#  sans = ["sso.rieau.local", "app.rieau.local"]
+#  main = "rieau.cohesion-territoires.gouv.fr,*.rieau.cohesion-territoires.gouv.fr"

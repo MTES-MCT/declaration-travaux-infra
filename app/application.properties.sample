@@ -1,0 +1,22 @@
+#Active profiles
+spring.profiles.active=staging
+
+# Persistence
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://db:5432/rieau
+spring.datasource.username=rieau
+spring.datasource.password=
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.generate-ddl=false
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration/{vendor}
+
+#CORS Policy
+app.frontend.domain=http://localhost:3000
+
+#Logging
+logging.level.root = info
+logging.level.com.github.mtesmct.rieau = debug
+# logging.level.org.hibernate.type=trace

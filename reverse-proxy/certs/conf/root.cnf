@@ -9,7 +9,7 @@ x509_extensions    = x509_ext
 countryName = fr
 organizationName = rieau
 commonName = rieau Root CA
-emailAddress  = rieau@rieau.local
+emailAddress  = rieau@docker.localhost
 [ x509_ext ]
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer

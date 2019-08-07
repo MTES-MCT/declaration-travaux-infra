@@ -8,6 +8,7 @@ networks:
 services:
   reverse-proxy:
     image: traefik:v1.7.12-alpine
+    container_name: reverse-proxy
     environment:
       TZ: Europe/Paris
     ports:
@@ -25,4 +26,6 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=traefik"
       - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:traefik.rieau.local"
+      - "traefik.port=7000"
+      - "traefik.frontend.rule=Host:reverse-proxy.docker.localhost"
+      - "traefik.frontend.entryPoints=http,https" 

@@ -20,12 +20,11 @@
 * Ajouter les domaines virtuels dans `/etc/hosts`:
 
 ```
-127.0.0.1  rieau.local
 127.0.0.1  app.rieau.local
 127.0.0.1  sso.rieau.local
-```
+127.0.0.1  traefik.rieau.local
 
-* Générer les certificats statiques auto-signés (pour le domaine rieau.local) dans le dossier `reverse-proxy/certs`:
+* Générer les certificats statiques auto-signés (pour le domaine localhost) dans le dossier `reverse-proxy/certs`:
 
 ```
 cd reverse-proxy/certs/
@@ -39,6 +38,8 @@ openssl x509 -days 3650 -req -in server.csr -CA root.cer -CAkey root.key -set_se
 ```
 cp sso/keycloak.env.sample sso/keycloak.env
 cp sso/gatekeeper/keycloak-gatekeeper.conf.sample sso/gatekeeper/keycloak-gatekeeper.conf
+cp app/application.properties.sample app/application.properties
+cp app/app.env.sample app/app.env
 ```
 
 * [Reverse Proxy Traefik](https://www.traefik.io/):

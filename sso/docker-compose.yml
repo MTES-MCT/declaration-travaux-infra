@@ -10,7 +10,7 @@ networks:
     external: true
 
 services:
-  keycloak_db:
+  db:
       image: postgres:11-alpine
       env_file: ./keycloak.env
       volumes:
@@ -20,17 +20,22 @@ services:
 
   keycloak:
       build: .
+      container_name: sso
       env_file: ./keycloak.env
       volumes:
         - ./rieau-dev.json:/tmp/rieau-dev.json:ro
       networks:
         - sso
         - web
+      ports:
+        - "8080:8080"
       depends_on:
-        - keycloak_db
+        - db
       command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled"]
       labels:
         - "traefik.enable=true"
         - "traefik.backend=sso"
+        - "traefik.port=8080"
         - "traefik.docker.network=web"
-        - "traefik.frontend.rule=Host:sso.rieau.local"
+        - "traefik.frontend.rule=Host:sso.docker.localhost"
+        - "traefik.frontend.entryPoints=http,https" 

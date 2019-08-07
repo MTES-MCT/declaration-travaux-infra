@@ -1,6 +1,7 @@
 sso/gatekeeper/*.conf
 sso/*.env
 app/*.env
+app/*.properties
 reverse-proxy/certs/*.key
 reverse-proxy/certs/*.cer
 reverse-proxy/certs/*.csr

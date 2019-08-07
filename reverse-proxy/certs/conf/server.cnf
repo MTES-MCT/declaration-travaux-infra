@@ -9,7 +9,7 @@ x509_extensions    = x509_ext
 countryName = fr
 organizationName = rieau
 commonName = Certificat Applications rieau
-emailAddress  = rieau@rieau.local
+emailAddress  = rieau@docker.localhost
 [ x509_ext ]
 nsCertType = server
 nsComment = "OpenSSL Generated Server Certificate"
@@ -21,5 +21,6 @@ basicConstraints = CA:FALSE
 keyUsage=critical,digitalSignature,keyAgreement
 subjectAltName = @alt_names
 [ alt_names ]
-DNS.1 = rieau.local
-DNS.2 = *.rieau.local
+DNS.1 = app.docker.localhost
+DNS.2 = sso.docker.localhost
+DNS.3 = traefik.docker.localhost
