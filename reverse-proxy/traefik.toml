@@ -1,6 +1,6 @@
 logLevel = "INFO"
 sendAnonymousUsage = true
-defaultEntryPoints = ["https","http"]
+defaultEntryPoints = ["http"]
 
 [healthcheck]
 
@@ -13,14 +13,14 @@ defaultEntryPoints = ["https","http"]
   [entryPoints.http]
   address = ":80"
   compress = true
-    [entryPoints.http.redirect]
-    entryPoint = "https"
-  [entryPoints.https]
-  address = ":443"
-    [entryPoints.https.tls]
-      [[entryPoints.https.tls.certificates]]
-        certFile = "/certs/server.cer"
-        keyFile = "/certs/server.key"
+  #   [entryPoints.http.redirect]
+  #   entryPoint = "https"
+  # [entryPoints.https]
+  # address = ":443"
+  #   [entryPoints.https.tls]
+  #     [[entryPoints.https.tls.certificates]]
+  #       certFile = "/certs/server.cer"
+  #       keyFile = "/certs/server.key"
   [entryPoints.traefik]
   address = ":7000"
 
@@ -34,6 +34,7 @@ endpoint = "unix:///var/run/docker.sock"
 exposedbydefault = false
 domain = "docker.localhost"
 watch = true
+network = "web"
 
 # [acme]
 # email = "tristan.robert.44@gmail.com"

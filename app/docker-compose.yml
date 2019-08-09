@@ -15,14 +15,12 @@ services:
     networks:
       - web
       - app
-    ports:
-      - "3000:3000"
     labels:
       - "traefik.enable=true"
       - "traefik.backend=ui"
       - "traefik.port=3000"
       - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:ui.docker.localhost"
+      - "traefik.frontend.rule=Host:rieau.docker.localhost"
 
   api:
     image: tristanrobert/rieau-api
@@ -30,8 +28,6 @@ services:
     container_name: api
     volumes: 
       - ./application.properties:/app/config/application-staging.properties:ro
-    ports:
-      - "5000:5000"
     depends_on:
       - db
       - files
@@ -43,7 +39,7 @@ services:
       - "traefik.backend=api"
       - "traefik.port=5000"
       - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:api.docker.localhost"
+      - "traefik.frontend.rule=Host:rieau.docker.localhost; PathPrefixStrip:/api"
 
   db:
     image: postgres:10-alpine

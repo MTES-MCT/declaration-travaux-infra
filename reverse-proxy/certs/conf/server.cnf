@@ -21,6 +21,6 @@ basicConstraints = CA:FALSE
 keyUsage=critical,digitalSignature,keyAgreement
 subjectAltName = @alt_names
 [ alt_names ]
-DNS.1 = app.docker.localhost
-DNS.2 = sso.docker.localhost
-DNS.3 = traefik.docker.localhost
+DNS.1 = rieau.docker.localhost
+DNS.2 = sso.rieau.docker.localhost
+DNS.3 = traefik.rieau.docker.localhost

@@ -17,13 +17,6 @@
 
 ### Dev
 
-* Ajouter les domaines virtuels dans `/etc/hosts`:
-
-```
-127.0.0.1  app.rieau.local
-127.0.0.1  sso.rieau.local
-127.0.0.1  traefik.rieau.local
-
 * Générer les certificats statiques auto-signés (pour le domaine localhost) dans le dossier `reverse-proxy/certs`:
 
 ```

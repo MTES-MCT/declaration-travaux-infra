@@ -13,9 +13,6 @@ spring.jpa.generate-ddl=false
 spring.flyway.enabled=true
 spring.flyway.locations=classpath:db/migration/{vendor}
 
-#CORS Policy
-app.frontend.domain=http://localhost:3000
-
 #Logging
 logging.level.root = info
 logging.level.com.github.mtesmct.rieau = debug
