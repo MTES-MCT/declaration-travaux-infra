@@ -1,9 +1,5 @@
 version: '3'
 
-volumes:
-  keycloak_data:
-      driver: local
-
 networks:
   sso:
   web:
@@ -14,17 +10,17 @@ services:
       image: postgres:11-alpine
       env_file: ./keycloak.env
       volumes:
-        - keycloak_data:/var/lib/postgresql/data
+        - /home/rieau/data/keycloak/postgresql:/var/lib/postgresql/data
       networks:
         - sso
 
   keycloak:
       build: .
       container_name: sso
-      hostname: sso.rieau.docker.localhost
+      hostname: sso.rieau.cohesion-territoires.gouv.fr
       env_file: ./keycloak.env
       volumes:
-        - ./rieau-dev.json:/tmp/rieau-dev.json:ro
+        # - ./rieau-dev.json:/tmp/rieau-dev.json:ro # dev only
       networks:
         web:
         sso:

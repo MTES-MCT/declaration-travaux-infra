@@ -49,7 +49,8 @@ services:
     restart: unless-stopped
     env_file: ./app.env
     volumes:
-      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
+      - /home/rieau/data/postgresql:/var/lib/postgresql/data
+    # - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro # dev only
 
   files:
     image: minio/minio
@@ -58,3 +59,5 @@ services:
       - app
     restart: unless-stopped
     command: server /data
+    volumes:
+      - /home/rieau/data/minio:/data

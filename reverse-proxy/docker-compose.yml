@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./conf/traefik.toml:/traefik.toml:ro
-      - ./conf/acme.json:/acme.json
+      - /home/rieau/data/traefik/acme.json:/acme.json
       - /var/run/docker.sock:/var/run/docker.sock
       - ./certs/:/certs/:ro
     networks:
