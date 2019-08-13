@@ -31,4 +31,4 @@ services:
         - "traefik.enable=true"
         - "traefik.backend=sso"
         - "traefik.docker.network=web"
-        - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr; PathPrefixStrip:/auth"
+        - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr; PathPrefixStrip:/sso"
