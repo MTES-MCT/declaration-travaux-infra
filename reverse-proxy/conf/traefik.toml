@@ -1,0 +1,55 @@
+debug = false
+logLevel = "INFO"
+defaultEntryPoints = ["http","https"]
+
+[healthcheck]
+
+[accessLog]
+
+[retry]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  compress = true
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+    sniStrict = true
+    minVersion = "VersionTLS12"
+    cipherSuites = [
+      "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+      "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256"
+    ]
+    # [entryPoints.https.tls] # dev only
+    #   [[entryPoints.https.tls.certificates]]
+    #     certFile = "/certs/server.cer"
+    #     keyFile = "/certs/server.key"
+    #     insecureSkipVerify = true
+
+[api]
+dashboard=true
+debug=false
+entryPoint = "traefik"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+exposedbydefault = false
+domain = "docker.localhost"
+watch = true
+network = "web"
+
+[acme]
+email = "tristan.robert@developpement-durable.gouv.fr"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+  [acme.httpChallenge]
+  entryPoint = "http"

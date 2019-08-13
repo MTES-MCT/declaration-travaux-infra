@@ -16,18 +16,19 @@ services:
       - "443:443"
     restart: unless-stopped
     volumes:
-      - ./traefik.toml:/traefik.toml:ro
+      - ./conf/traefik.toml:/traefik.toml:ro
+      - ./conf/acme.json:/acme.json
       - /var/run/docker.sock:/var/run/docker.sock
       - ./certs/:/certs/:ro
     networks:
       web:
-        aliases: # dev only
-          - traefik.rieau.docker.localhost
-          - sso.rieau.docker.localhost
-          - rieau.docker.localhost
+        # aliases: # dev only
+        #   - traefik.rieau.docker.localhost
+        #   - sso.rieau.docker.localhost
+        #   - rieau.docker.localhost
     labels:
       - "traefik.enable=true"
       - "traefik.backend=traefik"
       - "traefik.port=8080"
       - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:traefik.rieau.docker.localhost"
+      - "traefik.frontend.rule=Host:traefik.rieau.cohesion-territoires.gouv.fr"

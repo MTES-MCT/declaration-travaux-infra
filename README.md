@@ -17,6 +17,8 @@
 
 ### Dev
 
+* Remplacer le vrai domaine: `cohesion-territoires.gouv.fr` par le domaine de dev `docker.localhost` dans tous les fichiers de conf.
+
 * Générer les certificats statiques auto-signés (pour le domaine localhost) dans le dossier `reverse-proxy/certs`:
 
 ```
