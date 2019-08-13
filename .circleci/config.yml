@@ -1,33 +1,11 @@
 defaults: &defaults
   docker:
-    - image: circleci/node:10.15.3-browsers
-    - image: tristanrobert/rieau-ui
-    - image: tristanrobert/rieau-api
-    - image: tristanrobert/keycloak-france-connect
-      environment: 
-        KEYCLOAK_IMPORT: /tmp/rieau-dev.json
-    - image: postgres:11-alpine
-    - image: postgres:10-alpine
-  working_directory: ~/project/rieau-infra
+    - image: knqyf263/trivy
 
 version: 2
 jobs:
-  e2e-tests:
-    <<: *defaults
-    steps:
-      - run: git clone https://github.com/MTES-MCT/rieau-ui.git
-      - attach_workspace:
-          at: '~'
-      - run: cp .env.sample .env
-      - run: REACT_APP_API_MOCK=false npm run test:integration
-      - store_artifacts:
-          path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots 
-
   check-docker:
-    docker:
-      - image: knqyf263/trivy
+    <<: *defaults
     steps:
       - run:
           name: Scan the image vulnerabilities
@@ -53,12 +31,6 @@ workflows:
 
   e2e-tests:
     jobs:
-      - e2e-tests:
-          requires: []
-          filters:
-            branches:
-              only:
-                - master
       - check-docker:
           requires: []
           filters:
