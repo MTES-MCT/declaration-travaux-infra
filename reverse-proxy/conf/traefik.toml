@@ -42,7 +42,7 @@ entryPoint = "traefik"
 [docker]
 endpoint = "unix:///var/run/docker.sock"
 exposedbydefault = false
-domain = "docker.localhost"
+domain = "cohesion-territoires.gouv.fr"
 watch = true
 network = "web"
 

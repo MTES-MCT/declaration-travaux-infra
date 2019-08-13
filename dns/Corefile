@@ -1,0 +1,6 @@
+rieau.cohesion-territoires.gouv.fr {
+    file /zones/rieau.cohesion-territoires.gouv.fr
+    prometheus     # enable metrics
+    errors         # show errors
+    log            # enable query logs
+}

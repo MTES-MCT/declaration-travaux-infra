@@ -6,7 +6,7 @@
 
 ### Prérequis
 
-* Docker 18.09+
+* Docker 19.03+
 
 ### Dev
 
@@ -102,6 +102,16 @@ curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.loca
 ```
 
 ### Prod
+
+* [DNS local](https://www.coredns.io/):
+
+DNS ayant autorité sur la zone `rieau.cohesion-territoires.gouv.fr`.
+
+Configuration dans `zones` et `Corefile`.
+
+```
+docker-compose -f dns/docker-compose.yml up -d --build
+```
 
 * Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
 
