@@ -34,6 +34,14 @@ defaultEntryPoints = ["http","https"]
     #     keyFile = "/certs/server.key"
     #     insecureSkipVerify = true
 
+  [entryPoints.traefik]
+    address=":8080"
+    [entryPoints.traefik.auth]
+      [entryPoints.traefik.auth.basic]
+        users = [
+          "rieau:<password_hash>",
+        ]
+
 [api]
 dashboard=true
 debug=false
