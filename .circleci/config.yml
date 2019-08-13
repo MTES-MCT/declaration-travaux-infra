@@ -29,7 +29,7 @@ workflows:
       - check-docker:
           requires: []
 
-  e2e-tests:
+  check-docker:
     jobs:
       - check-docker:
           requires: []
