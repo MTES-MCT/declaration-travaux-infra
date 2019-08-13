@@ -17,7 +17,7 @@ services:
   keycloak:
       build: .
       container_name: sso
-      hostname: sso.rieau.cohesion-territoires.gouv.fr
+      # hostname: rieau.cohesion-territoires.gouv.fr
       env_file: ./keycloak.env
       volumes:
         # - ./rieau-dev.json:/tmp/rieau-dev.json:ro # dev only
@@ -31,4 +31,4 @@ services:
         - "traefik.enable=true"
         - "traefik.backend=sso"
         - "traefik.docker.network=web"
-        - "traefik.frontend.rule=Host:sso.rieau.cohesion-territoires.gouv.fr"
+        - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr; PathPrefixStrip:/sso"
