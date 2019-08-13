@@ -53,3 +53,6 @@ entryPoint = "https"
 onHostRule = true
   [acme.httpChallenge]
   entryPoint = "http"
+[[acme.domains]]
+  main = "rieau.cohesion-territoires.gouv.fr"
+  sans = ["traefik.rieau.cohesion-territoires.gouv.fr", "sso.rieau.cohesion-territoires.gouv.fr"]
