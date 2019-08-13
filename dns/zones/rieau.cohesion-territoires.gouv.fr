@@ -12,3 +12,4 @@ $TTL    900
 
 ; subdomains
 * IN A 94.23.208.200
+ownercheck d8f95aa0
