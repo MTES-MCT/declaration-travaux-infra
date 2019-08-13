@@ -21,6 +21,9 @@ services:
       - "traefik.port=3000"
       - "traefik.docker.network=web"
       - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr"
+      - "traefik.frontend.headers.STSSeconds=31536000"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
 
   api:
     image: tristanrobert/rieau-api
