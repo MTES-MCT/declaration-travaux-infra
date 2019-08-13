@@ -17,10 +17,10 @@ services:
   keycloak:
       build: .
       container_name: sso
-      # hostname: rieau.cohesion-territoires.gouv.fr
+      # hostname: rieau.cohesion-territoires.gouv.fr # dev only
       env_file: ./keycloak.env
-      volumes:
-        # - ./rieau-dev.json:/tmp/rieau-dev.json:ro # dev only
+      # volumes:
+      #   - ./rieau-dev.json:/tmp/rieau-dev.json:ro # dev only
       networks:
         web:
         sso:
