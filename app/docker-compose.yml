@@ -28,6 +28,7 @@ services:
     container_name: api
     volumes: 
       - ./application.properties:/app/config/application-staging.properties:ro
+      - ./server.cer:/app/server.cer:ro
     depends_on:
       - db
       - files

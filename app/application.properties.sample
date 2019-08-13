@@ -17,3 +17,13 @@ spring.flyway.locations=classpath:db/migration/{vendor}
 logging.level.root = info
 logging.level.com.github.mtesmct.rieau = debug
 # logging.level.org.hibernate.type=trace
+
+#Security
+keycloak.enabled = true
+keycloak.principal-attribute=preferred_username
+keycloak.realm = rieau
+keycloak.auth-server-url = http://localhost:8080/auth
+keycloak.ssl-required = external
+keycloak.resource = rieau-api
+keycloak.credentials.secret = 
+keycloak.use-resource-role-mappings = true

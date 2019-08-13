@@ -1,10 +1,8 @@
 logLevel = "INFO"
-sendAnonymousUsage = true
-defaultEntryPoints = ["http"]
+defaultEntryPoints = ["http","https"]
 
 [healthcheck]
 
-[traefikLog]
 [accessLog]
 
 [retry]
@@ -13,16 +11,15 @@ defaultEntryPoints = ["http"]
   [entryPoints.http]
   address = ":80"
   compress = true
-  #   [entryPoints.http.redirect]
-  #   entryPoint = "https"
-  # [entryPoints.https]
-  # address = ":443"
-  #   [entryPoints.https.tls]
-  #     [[entryPoints.https.tls.certificates]]
-  #       certFile = "/certs/server.cer"
-  #       keyFile = "/certs/server.key"
-  [entryPoints.traefik]
-  address = ":7000"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+      [[entryPoints.https.tls.certificates]] # dev only
+        certFile = "/certs/server.cer" # dev only
+        keyFile = "/certs/server.key" # dev only
+        insecureSkipVerify = true # dev only
 
 [api]
 dashboard=true

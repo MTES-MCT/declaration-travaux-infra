@@ -1,7 +1,8 @@
 {
   "id": "rieau",
   "realm": "rieau",
-  "notBefore": 0,
+  "displayName": "RIEAU",
+  "notBefore": 1565617542,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
   "accessTokenLifespan": 300,
@@ -289,7 +290,32 @@
       "rieau-ui": [],
       "security-admin-console": [],
       "admin-cli": [],
-      "rieau-api": [],
+      "rieau-api": [
+        {
+          "id": "2068dab1-fe80-4452-b089-51cae2accdfc",
+          "name": "depositaire",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "4b75dbe2-6374-4534-bcd9-9b783dfe9778",
+          "attributes": {}
+        },
+        {
+          "id": "337f8e2f-8fd6-4c83-b5d6-685e8cc7b242",
+          "name": "instructeur",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "4b75dbe2-6374-4534-bcd9-9b783dfe9778",
+          "attributes": {}
+        },
+        {
+          "id": "9913b6b4-03aa-4eb0-801d-afe1da22d4b4",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "4b75dbe2-6374-4534-bcd9-9b783dfe9778",
+          "attributes": {}
+        }
+      ],
       "broker": [
         {
           "id": "baac8761-e235-4bf0-a81a-9528571d5e79",
@@ -341,8 +367,8 @@
   },
   "groups": [],
   "defaultRoles": [
-    "offline_access",
     "uma_authorization",
+    "offline_access",
     "depositaire"
   ],
   "requiredCredentials": [
@@ -359,6 +385,20 @@
     "Google Authenticator"
   ],
   "scopeMappings": [
+    {
+      "clientScope": "roles",
+      "roles": [
+        "instructeur",
+        "depositaire"
+      ]
+    },
+    {
+      "clientScope": "profile",
+      "roles": [
+        "instructeur",
+        "depositaire"
+      ]
+    },
     {
       "clientScope": "offline_access",
       "roles": [
@@ -464,9 +504,8 @@
       ]
     },
     {
-      "id": "64c3f941-19a6-4d5d-b824-492d961d3f8e",
+      "id": "4b75dbe2-6374-4534-bcd9-9b783dfe9778",
       "clientId": "rieau-api",
-      "adminUrl": "http://localhost:5000",
       "surrogateAuthRequired": false,
       "enabled": true,
       "clientAuthenticatorType": "client-secret",
@@ -479,16 +518,16 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
       "attributes": {
         "saml.assertion.signature": "false",
-        "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
         "saml.encrypt": "false",
-        "login_theme": "fc-theme",
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
@@ -504,7 +543,49 @@
       "nodeReRegistrationTimeout": -1,
       "protocolMappers": [
         {
-          "id": "96a117bc-4cd2-4cac-8753-fce3bbee59d2",
+          "id": "8f2e1c28-130a-4972-90df-3a6b6f0aff3c",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "6dce1f97-a7db-4738-95e2-183463fd60bc",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "fb840453-c2d7-42aa-bd9a-48f90fdaafa2",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "f5c22f1e-0c74-4a75-ba41-27a8f5ac35d1",
           "name": "docker-v2-allow-all-mapper",
           "protocol": "docker-v2",
           "protocolMapper": "docker-v2-allow-all-mapper",
@@ -524,7 +605,49 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "Default Resource",
+            "type": "urn:rieau-api:resources:default",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "_id": "f8098895-25ae-468b-9797-d5cb68a471c1",
+            "uris": [
+              "/*"
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "id": "9218e518-5b07-43a0-9d19-9db62e38cf02",
+            "name": "Default Policy",
+            "description": "A policy that grants access only for users within this realm",
+            "type": "js",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+            }
+          },
+          {
+            "id": "2e2809b6-3b15-4b84-a1ac-f203fa59d140",
+            "name": "Default Permission",
+            "description": "A permission that applies to the default resource type",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "urn:rieau-api:resources:default",
+              "applyPolicies": "[\"Default Policy\"]"
+            }
+          }
+        ],
+        "scopes": []
+      }
     },
     {
       "id": "22b9accf-625f-4971-a5ae-35160efffe2f",
@@ -582,74 +705,6 @@
       ]
     },
     {
-      "id": "24f6cb5a-0943-49d3-8ec7-791aede3b6a4",
-      "clientId": "rieau-ui",
-      "rootUrl": "http://localhost:3000/",
-      "adminUrl": "http://localhost:3000/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
-      "redirectUris": [
-        "http://localhost:3000/*"
-      ],
-      "webOrigins": [
-        "http://localhost:3000"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": false,
-      "protocol": "openid-connect",
-      "attributes": {
-        "saml.assertion.signature": "false",
-        "saml.force.post.binding": "false",
-        "saml.multivalued.roles": "false",
-        "saml.encrypt": "false",
-        "login_theme": "fc-theme",
-        "saml.server.signature": "false",
-        "saml.server.signature.keyinfo.ext": "false",
-        "exclude.session.state.from.auth.response": "false",
-        "saml_force_name_id_format": "false",
-        "saml.client.signature": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "saml.authnstatement": "false",
-        "display.on.consent.screen": "false",
-        "saml.onetimeuse.condition": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "cdfe1bcf-a954-44dd-b019-8b1959242b79",
-          "name": "docker-v2-allow-all-mapper",
-          "protocol": "docker-v2",
-          "protocolMapper": "docker-v2-allow-all-mapper",
-          "consentRequired": false,
-          "config": {}
-        }
-      ],
-      "defaultClientScopes": [
-        "web-origins",
-        "role_list",
-        "profile",
-        "roles",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
       "id": "c584c664-cd4f-4681-8afd-9b277391eece",
       "clientId": "realm-management",
       "name": "${client_realm-management}",
@@ -676,6 +731,72 @@
       "protocolMappers": [
         {
           "id": "b23e884e-7c5c-42c2-a4a1-1cebb94b696e",
+          "name": "docker-v2-allow-all-mapper",
+          "protocol": "docker-v2",
+          "protocolMapper": "docker-v2-allow-all-mapper",
+          "consentRequired": false,
+          "config": {}
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "0bab1321-10f7-42c7-b9bb-e2d656fdf549",
+      "clientId": "rieau-ui",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "https://rieau.docker.localhost/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "login_theme": "fc-theme",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "3eeb0ea9-1a54-41f0-bfd9-702dd6987311",
           "name": "docker-v2-allow-all-mapper",
           "protocol": "docker-v2",
           "protocolMapper": "docker-v2-allow-all-mapper",
@@ -798,6 +919,7 @@
           "consentRequired": false,
           "config": {
             "multivalued": "true",
+            "userinfo.token.claim": "true",
             "user.attribute": "foo",
             "id.token.claim": "true",
             "access.token.claim": "true",
@@ -834,7 +956,7 @@
       "description": "OpenID Connect scope for add user roles to the access token",
       "protocol": "openid-connect",
       "attributes": {
-        "include.in.token.scope": "false",
+        "include.in.token.scope": "true",
         "display.on.consent.screen": "true",
         "consent.screen.text": "${rolesScopeConsentText}"
       },
@@ -851,6 +973,21 @@
             "claim.name": "realm_access.roles",
             "jsonType.label": "String",
             "multivalued": "true"
+          }
+        },
+        {
+          "id": "4bc157be-fd08-49ee-9ed6-44520ecf35d2",
+          "name": "profile",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "profile",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "profile",
+            "jsonType.label": "String"
           }
         },
         {
@@ -1329,14 +1466,15 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "saml-user-attribute-mapper",
+            "oidc-role-name-mapper",
             "oidc-full-name-mapper",
+            "saml-user-attribute-mapper",
             "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-property-mapper",
-            "saml-role-list-mapper"
+            "saml-role-list-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-address-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -1375,14 +1513,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "saml-role-list-mapper",
             "saml-user-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-address-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-attribute-mapper",
-            "oidc-full-name-mapper"
+            "oidc-full-name-mapper",
+            "oidc-usermodel-property-mapper"
           ]
         }
       },
@@ -1462,7 +1600,7 @@
   "defaultLocale": "fr",
   "authenticationFlows": [
     {
-      "id": "33fd2735-9b8b-497b-afc0-c20cd2a6b080",
+      "id": "d306cb9e-d62b-44dd-8db4-9ec822390c4c",
       "alias": "Handle Existing Account",
       "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
       "providerId": "basic-flow",
@@ -1493,7 +1631,7 @@
       ]
     },
     {
-      "id": "89f6a41a-6687-4172-b0c0-6ed61a1ba7e2",
+      "id": "2491e4fd-c7f0-4020-a245-ea063686fc6c",
       "alias": "Verify Existing Account by Re-authentication",
       "description": "Reauthentication of existing account",
       "providerId": "basic-flow",
@@ -1517,7 +1655,7 @@
       ]
     },
     {
-      "id": "f93f7bd3-970c-43b3-97d8-4728e2a940d2",
+      "id": "f2dc43d9-7838-4743-bc0c-291158af4582",
       "alias": "browser",
       "description": "browser based authentication",
       "providerId": "basic-flow",
@@ -1555,7 +1693,7 @@
       ]
     },
     {
-      "id": "2d906916-4a6c-44a4-be59-d4472f0a84e6",
+      "id": "0c3fcbab-da39-4115-98d0-b9d218286e7b",
       "alias": "clients",
       "description": "Base authentication for clients",
       "providerId": "client-flow",
@@ -1593,7 +1731,7 @@
       ]
     },
     {
-      "id": "e7625ced-6c98-4518-aafa-6b9762ab3f4e",
+      "id": "0f5cbade-bd4a-459b-a9e9-cbea95056f6b",
       "alias": "direct grant",
       "description": "OpenID Connect Resource Owner Grant",
       "providerId": "basic-flow",
@@ -1624,7 +1762,7 @@
       ]
     },
     {
-      "id": "77ddbf1e-89d7-42fc-b9b4-d324a9f59cd1",
+      "id": "6b68b1c2-fd17-46f8-9e30-ae53a441f39d",
       "alias": "docker auth",
       "description": "Used by Docker clients to authenticate against the IDP",
       "providerId": "basic-flow",
@@ -1641,7 +1779,7 @@
       ]
     },
     {
-      "id": "dec28194-44eb-48b5-89ae-51a54239b682",
+      "id": "0ccbd157-68f1-48da-aba0-736573808b57",
       "alias": "first broker login",
       "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
       "providerId": "basic-flow",
@@ -1674,7 +1812,7 @@
       ]
     },
     {
-      "id": "b4720015-0c30-4a89-b22c-16b4e39f868b",
+      "id": "c901bc84-5990-443a-b5d5-ea94721c96a1",
       "alias": "forms",
       "description": "Username, password, otp and other auth forms.",
       "providerId": "basic-flow",
@@ -1698,7 +1836,7 @@
       ]
     },
     {
-      "id": "f9ab6762-4df6-4a58-8753-59a7ac3a54b7",
+      "id": "a2e0a046-f103-4515-bbe4-8872e07bbea0",
       "alias": "http challenge",
       "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
       "providerId": "basic-flow",
@@ -1736,7 +1874,7 @@
       ]
     },
     {
-      "id": "fa67e2e4-6e63-4d3a-b37e-730a7b7095ad",
+      "id": "459dbd2f-caa8-43e6-a235-2dff9c0c905e",
       "alias": "registration",
       "description": "registration flow",
       "providerId": "basic-flow",
@@ -1754,7 +1892,7 @@
       ]
     },
     {
-      "id": "a454e884-0bab-4b49-a945-8ae912ce9ab2",
+      "id": "31a623a5-bf34-46be-851a-3f4ae05a5203",
       "alias": "registration form",
       "description": "registration form",
       "providerId": "form-flow",
@@ -1792,7 +1930,7 @@
       ]
     },
     {
-      "id": "cb5400e5-0504-4ac9-b556-f75730d3b20e",
+      "id": "5e696081-e48b-47aa-9f5b-8927f9c2c911",
       "alias": "reset credentials",
       "description": "Reset credentials for a user if they forgot their password or something",
       "providerId": "basic-flow",
@@ -1830,7 +1968,7 @@
       ]
     },
     {
-      "id": "c4ef3a1d-1d92-4409-8efc-69062fee716b",
+      "id": "7b654220-df90-43d8-8645-818efe63edd2",
       "alias": "saml ecp",
       "description": "SAML ECP Profile Authentication Flow",
       "providerId": "basic-flow",
@@ -1849,14 +1987,14 @@
   ],
   "authenticatorConfig": [
     {
-      "id": "6ddfaf34-9b5b-4459-9964-a31b38e3c2a4",
+      "id": "1d68ef09-c1e6-4e71-a9a7-0bf7a0fc6cd5",
       "alias": "create unique user config",
       "config": {
         "require.password.update.after.registration": "false"
       }
     },
     {
-      "id": "21585bd9-a7db-4b8a-aefd-d6ef7a440871",
+      "id": "309a7e12-9bf3-4901-b915-eb45aa027b94",
       "alias": "review profile config",
       "config": {
         "update.profile.on.first.login": "missing"
@@ -1922,10 +2060,12 @@
     "_browser_header.xFrameOptions": "SAMEORIGIN",
     "quickLoginCheckMilliSeconds": "1000",
     "permanentLockout": "false",
+    "displayName": "RIEAU",
     "_browser_header.xRobotsTag": "none",
     "maxFailureWaitSeconds": "900",
     "minimumQuickLoginWaitSeconds": "60",
     "failureFactor": "30",
+    "hostname": "",
     "actionTokenGeneratedByUserLifespan": "300",
     "maxDeltaTimeSeconds": "43200",
     "_browser_header.xContentTypeOptions": "nosniff",

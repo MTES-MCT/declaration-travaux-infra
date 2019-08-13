@@ -13,8 +13,7 @@ services:
       TZ: Europe/Paris
     ports:
       - "80:80"
-      # - "443:443"
-      - "7000:7000"
+      - "443:443"
     restart: unless-stopped
     volumes:
       - ./traefik.toml:/traefik.toml:ro
@@ -22,9 +21,13 @@ services:
       - ./certs/:/certs/:ro
     networks:
       web:
+        aliases: # dev only
+          - traefik.rieau.docker.localhost
+          - sso.rieau.docker.localhost
+          - rieau.docker.localhost
     labels:
       - "traefik.enable=true"
       - "traefik.backend=traefik"
-      - "traefik.port=7000"
+      - "traefik.port=8080"
       - "traefik.docker.network=web"
       - "traefik.frontend.rule=Host:traefik.rieau.docker.localhost"
