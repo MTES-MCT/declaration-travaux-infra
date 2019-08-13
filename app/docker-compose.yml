@@ -50,7 +50,7 @@ services:
     env_file: ./app.env
     volumes:
       - /home/rieau/data/postgresql:/var/lib/postgresql/data
-    # - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro # dev only
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
 
   files:
     image: minio/minio
