@@ -1,4 +1,15 @@
 #!/bin/bash
 
 source backup.env
-lftp -u $FTP_USER,$FTP_PASSWORD -e "mirror --reverse --delete --only-newer --verbose $SRC $DEST --log=$RESTORE_LOG_FILE" $FTP_SITE &
+
+FILENAME=backup-rieau-$TIME.tar.gz
+DESDIR=/backup  
+
+ftp -inv $FTP_SITE <<EOF
+    user $FTP_USER $FTP_PASSWORD
+    lcd $DESDIR
+    mget $FILENAME
+    bye
+EOF
+
+tar -tvf "$DESDIR/$FILENAME"
