@@ -31,4 +31,4 @@ services:
       - "traefik.backend=traefik"
       - "traefik.port=8080"
       - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:traefik.rieau.cohesion-territoires.gouv.fr"
+      - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr; PathPrefixStrip:/traefik"

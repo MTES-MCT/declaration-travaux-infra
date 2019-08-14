@@ -46,7 +46,7 @@ Configuration dans `reverse-proxy/traefik.toml`.
 docker-compose -f reverse-proxy/docker-compose.yml up -d --build
 ```
 
-La consultation de la Web GUI du reverse proxy est disponible sur [traefik.rieau.docker.localhost](https://traefik.rieau.docker.localhost).
+La consultation de la Web GUI du reverse proxy est disponible sur [rieau.docker.localhost/traefik](https://rieau.docker.localhost/traefik).
 
 * [SSO Keycloak](https://www.keycloak.org/):
 
@@ -54,7 +54,7 @@ La consultation de la Web GUI du reverse proxy est disponible sur [traefik.rieau
 docker-compose -f sso/docker-compose.yml up -d --build
 ```
 
-L'administration du SSO est disponible sur [sso.rieau.docker.localhost](https://sso.rieau.docker.localhost).
+L'administration du SSO est disponible sur [rieau.docker.localhost/auth](https://rieau.docker.localhost/auth).
 
 * App (UI+API):
 
