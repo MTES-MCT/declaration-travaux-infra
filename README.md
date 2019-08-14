@@ -1,5 +1,7 @@
 # RIEAU INFRA
 
+[![CircleCI](https://circleci.com/gh/MTES-MCT/rieau-infra/tree/master.svg?style=svg)](https://circleci.com/gh/MTES-MCT/rieau-infra/tree/master)
+
 > Infrastructure de déploiement de RIEAU
 
 ## Développement
