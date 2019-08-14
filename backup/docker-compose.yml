@@ -2,9 +2,9 @@ version: '3.5'
 
 services:
   rclone:
-    build: bcardiff/docker-rclone
+    image: bcardiff/docker-rclone
     container_name: rclone
     env_file: rclone.env
     volumes:
-      - /home/rieau/rclone/config:/config
+      - /home/rieau/data/rclone/config:/config
       - /home/rieau/data:/data:ro 
