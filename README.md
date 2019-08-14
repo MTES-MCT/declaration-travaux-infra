@@ -103,17 +103,25 @@ Test d'une ressource, par exemple `/depots`:
 curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.localhost/api/depots
 ```
 
+* Backups:
+
+Renseigner les variables d'environnement:
+
+```
+cp backup/backup.env.sample backup/backup.env
+```
+
+```
+./backup/backup.sh
+```
+
+Restore:
+
+```
+./backup/restore.sh
+```
+
 ### Prod
-
-* [DNS local](https://www.coredns.io/):
-
-DNS ayant autorité sur la zone `rieau.cohesion-territoires.gouv.fr`.
-
-Configuration dans `zones` et `Corefile`.
-
-```
-docker-compose -f dns/docker-compose.yml up -d --build
-```
 
 * Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
 
