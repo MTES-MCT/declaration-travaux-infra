@@ -2,14 +2,15 @@
 
 source backup.env
 
-FILENAME=backup-rieau-$TIME.tar.gz
-DESDIR=/backup  
 
-ftp -inv $FTP_SITE <<EOF
-    user $FTP_USER $FTP_PASSWORD
-    lcd $DESDIR
-    mget $FILENAME
+ftp -p -inv $FTP_SITE <<EOF
+    user $FTP_USER $FTP_PASS
+    lcd $DEST
+    mget *.tar.gz
     bye
 EOF
 
-tar -tvf "$DESDIR/$FILENAME"
+# FILENAME="backup-rieau-août-19-191566204128.tar.gz"
+if [ ! -z "$FILENAME" ]; then
+    tar -zxvf "$DEST/$FILENAME"
+fi

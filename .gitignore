@@ -2,6 +2,8 @@ sso/gatekeeper/*.conf
 sso/*.env
 app/*.env
 backup/*.env
+backup/ftp/test
+backup/test
 app/*.properties
 reverse-proxy/certs/*.key
 reverse-proxy/certs/*.cer

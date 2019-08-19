@@ -17,13 +17,13 @@
 
 ## Déploiements
 
-### Dev
+### En dev
 
 * Remplacer le vrai domaine: `cohesion-territoires.gouv.fr` par le domaine de dev `docker.localhost` dans tous les fichiers de conf.
 
 * Générer les certificats statiques auto-signés (pour le domaine localhost) dans le dossier `reverse-proxy/certs`:
 
-```
+```shell
 cd reverse-proxy/certs/
 openssl req -x509 -new -keyout root.key -out root.cer -config conf/root.cnf
 openssl req -nodes -new -keyout server.key -out server.csr -config conf/server.cnf
@@ -34,7 +34,7 @@ Copier server.cer dans `app`.
 
 * Renseigner les variables d'environnement:
 
-```
+```shell
 cp sso/keycloak.env.sample sso/keycloak.env
 cp app/application.properties.sample app/application.properties
 cp app/app.env.sample app/app.env
@@ -44,7 +44,7 @@ cp app/app.env.sample app/app.env
 
 Configuration dans `reverse-proxy/traefik.toml`.
 
-```
+```shell
 docker-compose -f reverse-proxy/docker-compose.yml up -d --build
 ```
 
@@ -52,7 +52,7 @@ La consultation de la Web GUI du reverse proxy est disponible sur [rieau.docker.
 
 * [SSO Keycloak](https://www.keycloak.org/):
 
-```
+```shell
 docker-compose -f sso/docker-compose.yml up -d --build
 ```
 
@@ -60,7 +60,7 @@ L'administration du SSO est disponible sur [rieau.docker.localhost/auth](https:/
 
 * App (UI+API):
 
-```
+```shell
 docker-compose -f app/docker-compose.yml up -d --build
 ```
 
@@ -72,7 +72,7 @@ Prérequis: [jq](https://stedolan.github.io/jq/).
 
 Récupération d'un token valide (cf. application.properties.sample):
 
-```
+```shell
 KC_REALM=rieau
 KC_USERNAME=jean.martin
 KC_PASSWORD=
@@ -99,29 +99,35 @@ KC_REFRESH_TOKEN=$(echo $KC_RESPONSE| jq -r .refresh_token)
 
 Test d'une ressource, par exemple `/depots`:
 
-```
+```shell
 curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.localhost/api/depots
 ```
 
 * Backups:
 
+Lancer un serveur ftp en mode passif pour les tests:
+
+```shell
+docker-compose -f backup/ftp/docker-compose.yml up -d --build
+```
+
 Renseigner les variables d'environnement:
 
-```
+```shell
 cp backup/backup.env.sample backup/backup.env
 ```
 
-```
+```shell
 ./backup/backup.sh
 ```
 
 Restore:
 
-```
+```shell
 ./backup/restore.sh
 ```
 
-### Prod
+### En prod
 
 * Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
 
