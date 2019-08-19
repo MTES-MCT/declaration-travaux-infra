@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source backup.env
+source $BACKUP_DIR/backup.env
 
 TIME=`date +%b-%d-%y%s`          # This Command will add date in Backup File Name.
 FILENAME=backup-rieau-$TIME.tar.gz     # Here i define Backup file name format.

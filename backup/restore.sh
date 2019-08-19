@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source backup.env
+source $BACKUP_DIR/backup.env
 
 
 ftp -p -inv $FTP_SITE <<EOF
