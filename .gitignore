@@ -2,6 +2,7 @@ sso/gatekeeper/*.conf
 sso/*.env
 app/*.env
 backup/*.env
+mail/*.env
 backup/ftp/test
 backup/test
 app/*.properties

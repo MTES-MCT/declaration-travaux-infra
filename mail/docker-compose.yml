@@ -11,10 +11,10 @@ services:
     - "587:587"
     - "465:465"
     volumes:
-    - ./data/:/var/mail/
-    - ./state/:/var/mail-state/
-    - ./config/:/tmp/docker-mailserver/
-    - /var/ds/wsproxy/letsencrypt/:/etc/letsencrypt/
+    - /home/rieau/data/mail/data/:/var/mail/
+    - /home/rieau/data/mail/state/:/var/mail-state/
+    - /home/rieau/data/mail/config/:/tmp/docker-mailserver/
+    - /home/rieau/data/mail/letsencrypt/:/etc/letsencrypt/
     environment:
     - PERMIT_DOCKER=network
     - SSL_TYPE=letsencrypt
