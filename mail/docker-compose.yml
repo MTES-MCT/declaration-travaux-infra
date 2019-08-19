@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  mail:
+    image: tvial/docker-mailserver:latest
+    hostname: rieau
+    domainname: cohesion-territoires.gouv.fr
+    container_name: mail
+    ports:
+    - "25:25"
+    - "587:587"
+    - "465:465"
+    volumes:
+    - ./data/:/var/mail/
+    - ./state/:/var/mail-state/
+    - ./config/:/tmp/docker-mailserver/
+    - /var/ds/wsproxy/letsencrypt/:/etc/letsencrypt/
+    environment:
+    - PERMIT_DOCKER=network
+    - SSL_TYPE=letsencrypt
+    - ONE_DIR=1
+    - DMS_DEBUG=1
+    - SPOOF_PROTECTION=0
+    - REPORT_RECIPIENT=1
+    - ENABLE_SPAMASSASSIN=0
+    - ENABLE_CLAMAV=0
+    - ENABLE_FAIL2BAN=1
+    - ENABLE_POSTGREY=0
+    cap_add:
+    - NET_ADMIN
+    - SYS_PTRACE
