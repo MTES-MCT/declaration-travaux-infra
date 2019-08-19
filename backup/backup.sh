@@ -1,11 +1,16 @@
 #!/bin/bash
 
-source $BACKUP_DIR/backup.env
+cd rieau-infra/backup
 
-TIME=`date +%b-%d-%y%s`          # This Command will add date in Backup File Name.
-FILENAME=backup-rieau-$TIME.tar.gz     # Here i define Backup file name format.
+source backup.env
 
-tar -zcvf $DEST/$FILENAME $SRC
+TIME=`date +%d-%m-%Y"_"%H_%M_%S`
+FILENAME=backup-rieau-$TIME.tar.gz
+
+docker-compose -f ../app/docker-compose.yml exec -T db pg_dump -U rieau > rieau_dump_$TIME.sql
+docker-compose -f ../sso/docker-compse.yml exec -T db pg_dump -U keycloak > sso_dump_$TIME.sql
+
+tar -zcvf $DEST/$FILENAME $SRC/traefik/acme.json *_dump_*.sql
 
 ftp -p -inv $FTP_SITE <<EOF
     user $FTP_USER $FTP_PASS

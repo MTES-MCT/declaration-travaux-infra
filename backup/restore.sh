@@ -1,7 +1,8 @@
 #!/bin/bash
 
-source $BACKUP_DIR/backup.env
+cd rieau-infra/backup
 
+source backup.env
 
 ftp -p -inv $FTP_SITE <<EOF
     user $FTP_USER $FTP_PASS
