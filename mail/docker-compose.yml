@@ -1,5 +1,9 @@
 version: '2'
 
+networks:
+  web:
+    external: true
+
 services:
   mail:
     image: tvial/docker-mailserver:latest
@@ -16,7 +20,7 @@ services:
     - /home/rieau/data/mail/config/:/tmp/docker-mailserver/
     - /home/rieau/data/mail/letsencrypt/:/etc/letsencrypt/
     environment:
-    - PERMIT_DOCKER=network
+    - PERMIT_DOCKER=connected-networks
     - SSL_TYPE=letsencrypt
     - ONE_DIR=1
     - DMS_DEBUG=1
@@ -29,3 +33,5 @@ services:
     cap_add:
     - NET_ADMIN
     - SYS_PTRACE
+    networks: 
+      web:
