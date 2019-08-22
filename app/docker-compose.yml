@@ -7,7 +7,7 @@ networks:
 services:
 
   ui:
-    image: tristanrobert/rieau-ui
+    image: tristanrobert/rieau-ui:0.1.0
     container_name: ui
     env_file: ./app.env
     depends_on:
@@ -64,3 +64,20 @@ services:
     command: server /data
     volumes:
       - /home/rieau/data/minio:/data
+
+  demo:
+    image: tristanrobert/rieau-ui:latest
+    container_name: demo
+    environment: 
+      - SERVER_PORT=3100
+      - REACT_APP_API_MOCK=true
+      - REACT_APP_BASENAME=/demo
+      - PUBLIC_URL=https://rieau.cohesion-territoires.gouv.fr/demo
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=demo"
+      - "traefik.port=3100"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.rule=Host:rieau.cohesion-territoires.gouv.fr; PathPrefixStrip:/demo"
