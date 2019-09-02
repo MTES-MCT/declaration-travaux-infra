@@ -7,7 +7,7 @@ networks:
 services:
 
   ui:
-    image: tristanrobert/rieau-ui:0.1.0
+    image: tristanrobert/rieau-ui:0.2.0
     container_name: ui
     env_file: ./app.env
     depends_on:
