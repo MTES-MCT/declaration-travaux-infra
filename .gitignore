@@ -1,5 +1,6 @@
 sso/gatekeeper/*.conf
 sso/*.env
+sso/k8s/*.json
 app/*.env
 backup/*.env
 mail/*.env
@@ -10,3 +11,5 @@ reverse-proxy/certs/*.key
 reverse-proxy/certs/*.cer
 reverse-proxy/certs/*.csr
 app/*.cer
+k8s/helm/*.pem
+k8s/helm/*.srl

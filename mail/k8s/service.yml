@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mailserver
+  labels:
+    app: mailserver
+spec:
+  selector:
+    app: mailserver
+  ports:
+    - name: smtp
+      port: 25
+      targetPort: smtp
+    - name: smtp-auth
+      port: 587
+      targetPort: smtp-auth

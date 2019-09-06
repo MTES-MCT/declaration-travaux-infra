@@ -4,104 +4,15 @@
 
 > Infrastructure de déploiement de RIEAU
 
-## Développement
+## En dev
 
-### Prérequis
+* Le [reverse proxy](reverse-proxy/README)
 
-* Docker 19.03+
+* Le [SSO](sso/README)
 
-### Dev
+* Le [Mail server](mail/README)
 
-* Docker-compose 1.24+
-* [Minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) 1.12+
-
-## Déploiements
-
-### En dev
-
-* Remplacer le vrai domaine: `cohesion-territoires.gouv.fr` par le domaine de dev `docker.localhost` dans tous les fichiers de conf.
-
-* Générer les certificats statiques auto-signés (pour le domaine localhost) dans le dossier `reverse-proxy/certs`:
-
-```shell
-cd reverse-proxy/certs/
-openssl req -x509 -new -keyout root.key -out root.cer -config conf/root.cnf
-openssl req -nodes -new -keyout server.key -out server.csr -config conf/server.cnf
-openssl x509 -days 3650 -req -in server.csr -CA root.cer -CAkey root.key -set_serial 123 -out server.cer -extfile conf/server.cnf -extensions x509_ext
-```
-
-Copier server.cer dans `app`.
-
-* Renseigner les variables d'environnement:
-
-```shell
-cp sso/keycloak.env.sample sso/keycloak.env
-cp app/application.properties.sample app/application.properties
-cp app/app.env.sample app/app.env
-```
-
-* [Reverse Proxy Traefik](https://www.traefik.io/):
-
-Configuration dans `reverse-proxy/traefik.toml`.
-
-```shell
-docker-compose -f reverse-proxy/docker-compose.yml up -d --build
-```
-
-La consultation de la Web GUI du reverse proxy est disponible sur [rieau.docker.localhost/traefik](https://rieau.docker.localhost/traefik).
-
-* [SSO Keycloak](https://www.keycloak.org/):
-
-```shell
-docker-compose -f sso/docker-compose.yml up -d --build
-```
-
-L'administration du SSO est disponible sur [rieau.docker.localhost/auth](https://rieau.docker.localhost/auth).
-
-* App (UI+API):
-
-```shell
-docker-compose -f app/docker-compose.yml up -d --build
-```
-
-L'application est disponible sur [rieau.docker.localhost](https://rieau.docker.localhost).
-
-* Tester manuellement l'intégration de l'API (backend) avec le SSO Keycloak:
-
-Prérequis: [jq](https://stedolan.github.io/jq/).
-
-Récupération d'un token valide (cf. application.properties.sample):
-
-```shell
-KC_REALM=rieau
-KC_USERNAME=jean.martin
-KC_PASSWORD=
-KC_CLIENT=rieau-api
-KC_CLIENT_SECRET=
-KC_URL="https://sso.rieau.docker.localhost/auth"
-
-# Request Tokens for credentials
-KC_RESPONSE=$( \
-   curl -k -v \
-        -d "username=$KC_USERNAME" \
-        -d "password=$KC_PASSWORD" \
-        -d 'grant_type=password' \
-        -d "client_id=$KC_CLIENT" \
-        -d "client_secret=$KC_CLIENT_SECRET" \
-        "$KC_URL/realms/$KC_REALM/protocol/openid-connect/token" \
-    | jq .
-)
-
-KC_ACCESS_TOKEN=$(echo $KC_RESPONSE| jq -r .access_token)
-KC_ID_TOKEN=$(echo $KC_RESPONSE| jq -r .id_token)
-KC_REFRESH_TOKEN=$(echo $KC_RESPONSE| jq -r .refresh_token)
-```
-
-Test d'une ressource, par exemple `/depots`:
-
-```shell
-curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.localhost/api/depots
-```
+* L'[application](app/README)
 
 * Backups:
 
@@ -127,8 +38,178 @@ Restore:
 ./backup/restore.sh
 ```
 
-### En prod
+## En prod
 
-* Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
+Administration du cluster [Kubernetes](https://kubernetes.io) avec [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/).
 
-* Déploiements des pods par [kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/).
+### Préparation du Host
+
+* Créer le user ??? avec droits sudo:
+
+```shell
+addUser ???
+usermod -aG sudo ???
+```
+
+* Sécuriser le serveur en s'inspirant du [tuto](https://gist.github.com/lokhman/cc716d2e2d373dd696b2d9264c0287a3)
+
+* Retirer le root:
+
+```shell
+sudo passwd -l root
+```
+
+* Activer authentification 2FA cf [tuto](https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-ubuntu-16-04):
+
+```shell
+sudo apt-get install libpam-google-authenticator
+google-authenticator
+sudo echo `auth required pam_google_authenticator.so` >> /etc/pam.d/sshd
+sudo echo `#@include common-auth` >> /etc/pam.d/sshd
+```
+
+* Restreindre l'accès SSH au certificat pour le user en s'inspirant du [tuto](https://medium.com/@jasonrigden/hardening-ssh-1bcb99cd4cef):
+
+```shell
+ssh-copy-id -i ...
+sudo nano /etc/ssh/sshd_config
+PermitRootLogin no
+PermitEmptyPasswords no
+StrictModes yes
+UseDNS no
+X11Forwarding no
+PasswordAuthentication no
+AllowUsers ???@?.?.?.*
+UsePAM yes
+ChallengeResponseAuthentication yes
+AuthenticationMethods publickey,keyboard-interactive
+...
+sudo systemctl reload sshd
+```
+
+* Activer le firewall local:
+
+```shell
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
+```
+
+* Mises à jour automatiques des patchs de sécurité:
+
+```shell
+sudo apt-get install unattended-upgrades
+sudo dpkg-reconfigure -plow unattended-upgrades
+```
+
+* Installer fail2ban et l'antivirus ClamAV:
+
+```shell
+sudo apt install fail2ban clamav clamav-daemon
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo echo `[sshd]
+enabled  = true
+port    = ssh
+logpath = %(sshd_log)s` >> /etc/fail2ban/jail.local
+```
+
+* Sécuriser la mémoire partagée:
+
+```shell
+sudo echo 'tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0' >> /etc/fstab
+```
+
+* Changer le timezone: `sudo timedatectl set-timezone Europe/Paris`
+
+* Désactiver le swap:
+
+```shell
+sudo swapoff -a
+# comment lines swap in /etc/fstab
+```
+
+* Hostname unique: `sudo hostnamectl set-hostname rieau.cohesion-territoires.gouv.fr`
+
+### Installation du cluster Kubernetes
+
+* Installer le Container runtime [Docker](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker)
+* Installer [runc](https://github.com/opencontainers/runc): `sudo apt install runc`, pour corriger le [Bug](https://github.com/kubernetes/kubernetes/issues/76531), installer ce [fix de runc](https://github.com/youurayy/runc/releases/tag/v1.0.0-rc8-slice-fix-2).
+* Installer [kubeadm](https://kubernetes.io/fr/docs/setup/independent/install-kubeadm/)
+* [Création](https://kubernetes.io/fr/docs/setup/independent/create-cluster-kubeadm/) du cluster: `sudo kubeadm init --pod-network-cidr=192.168.0.0/16`
+* Installation du CNI [Calico](https://docs.projectcalico.org/v3.8/getting-started/kubernetes/):
+
+```shell
+kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+```
+
+* Créer le stockage local sur le single node `rieau.cohesion-territoires.gouv.fr`:
+
+```shell
+mkdir -p $HOME/data
+kubectl create -f storage/
+```
+
+### Installation de Helm
+
+> [Helm](https://helm.sh/docs/using_helm/#installing-helm)
+
+#### Client
+
+```shell
+curl -L https://git.io/get_helm.sh | sudo bash
+```
+
+#### Serveur Tiller
+
+* [Sécurisation](https://helm.sh/docs/using_helm/#securing-your-helm-installation) préalable:
+
+Création du service account tiller dans le namespace rieau:
+
+```shell
+kubectl create serviceaccount tiller --namespace rieau
+```
+
+Création du role et de son binding:
+
+```shell
+kubectl create -f helm/
+```
+
+Pour la création des clés pour la connexion TLS entre le client et le serveur, se placer dans le répertoire k8s/helm et suivre le [tuto](https://helm.sh/docs/using_helm/#using-ssl-between-helm-and-tiller).
+
+* Installation de Tiller restreint au namespace rieau:
+
+```shell
+helm init \
+--override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}' \
+--tiller-tls \
+--tiller-tls-cert ./tiller.cert.pem \
+--tiller-tls-key ./tiller.key.pem \
+--tiller-tls-verify \
+--tls-ca-cert ca.cert.pem \
+--service-account=tiller \
+--tiller-namespace=rieau
+```
+
+* Configuration du client:
+
+Test:
+
+```shell
+helm ls --tls --tls-ca-cert ca.cert.pem --tls-cert helm.cert.pem --tls-key helm.key.pem --tiller-namespace rieau
+```
+
+Installation des certificats client:
+
+```shell
+cp ca.cert.pem $(helm home)/ca.pem
+cp helm.cert.pem $(helm home)/cert.pem
+cp helm.key.pem $(helm home)/key.pem
+```
+
+Test:
+
+```shell
+helm ls --tls --tiller-namespace rieau
+```

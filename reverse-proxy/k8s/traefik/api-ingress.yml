@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/ssl-temporary-redirect: "false"
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    traefik.ingress.kubernetes.io/auth-type: "basic"
+    traefik.ingress.kubernetes.io/auth-secret: "traefik-api-secret"
+    traefik.frontend.rule.type: PathPrefixStrip
+  name: traefik-web-ui
+spec:
+  rules:
+  - host: rieau.cohesion-territoires.gouv.fr
+    http:
+      paths:
+      - path: /traefik
+        backend:
+          serviceName: traefik-ingress-service-clusterip
+          servicePort: admin
+  tls:
+  - secretName: rieau-cert

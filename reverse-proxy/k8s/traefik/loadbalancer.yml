@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-ingress-service-lb
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  ports:
+    - protocol: TCP
+      port: 80
+      name: web
+    - protocol: TCP
+      port: 443
+      name: secure
+  type: LoadBalancer
+  externalIPs:
+  - 94.23.208.200

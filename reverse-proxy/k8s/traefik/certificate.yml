@@ -1,0 +1,15 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: rieau-cert
+spec:
+  secretName: rieau-cert
+  issuerRef:
+    name: letsencrypt
+  commonName: rieau.cohesion-territoires.gouv.fr
+  acme:
+    config:
+    - http01:
+        ingressClass: traefik
+      domains:
+      - rieau.cohesion-territoires.gouv.fr
