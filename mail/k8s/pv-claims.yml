@@ -1,0 +1,24 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mail-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi 
+  storageClassName: local-storage
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mail-state-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi 
+  storageClassName: local-storage

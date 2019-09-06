@@ -1,0 +1,40 @@
+clusterDomain: rieau.cohesion-territoires.gouv.fr
+keycloak:
+  username: admin
+  image:
+    repository: tristanrobert/keycloak-france-connect
+    tag: 7.0.0
+  service:
+    type: NodePort
+  hostAliases:
+    - ip: 94.23.208.200
+      hostnames:
+        - rieau.cohesion-territoires.gouv.fr
+  ingress:
+    enabled: true
+    annotations: 
+      kubernetes.io/ingress.class: traefik
+      traefik.frontend.rule.type: PathPrefix
+    hosts: 
+      - rieau.cohesion-territoires.gouv.fr
+    path: /auth 
+    tls:
+    - hosts: 
+      - rieau.cohesion-territoires.gouv.fr
+      secretName: rieau-cert
+  persistence:
+    deployPostgres: true
+    dbVendor: postgres  
+  extraVolumes: |
+    - name: realm-rieau-secret
+      secret:
+        secretName: realm-rieau-secret
+  extraVolumeMounts: |
+    - name: realm-rieau-secret
+      mountPath: "/realm/"
+      readOnly: true
+  extraArgs: -Dkeycloak.import=/realm/realm-rieau.json
+postgresql:
+  persistence:
+    enabled: true
+    existingClaim: keycloak-db-data

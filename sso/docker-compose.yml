@@ -26,7 +26,6 @@ services:
         sso:
       depends_on:
         - db
-      command: ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.docker=enabled"]
       labels:
         - "traefik.enable=true"
         - "traefik.backend=sso"

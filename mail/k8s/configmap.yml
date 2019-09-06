@@ -1,0 +1,19 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: mailserver.config
+  labels:
+    app: mailserver
+data:
+
+  SigningTable: |
+    *@rieau.cohesion-territoires.gouv.fr mail._domainkey.rieau.cohesion-territoires.gouv.fr
+
+  KeyTable: |
+    mail._domainkey.rieau.cohesion-territoires.gouv.fr rieau.cohesion-territoires.gouv.fr:mail:/etc/opendkim/keys/rieau-mail.key
+
+  TrustedHosts: |
+    127.0.0.1
+    localhost
+    94.23.208.200
+    rieau.cohesion-territoires.gouv.fr

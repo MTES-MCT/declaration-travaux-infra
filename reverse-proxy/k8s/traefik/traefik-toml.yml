@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-conf
+data:
+  traefik.toml: |
+    defaultEntryPoints = ["http", "https"]
+    logLevel = "INFO"
+    [entryPoints]
+      [entryPoints.http]
+        address = ":80"
+      [entryPoints.https]
+        address = ":443"
+        [entryPoints.https.tls]
+      [entryPoints.api]
+        address=":8080"
+    [api]
+    entryPoint = "api"
+    dashboard = true
+    debug = false
+    [kubernetes]
