@@ -64,8 +64,12 @@ sudo passwd -l root
 ```shell
 sudo apt-get install libpam-google-authenticator
 google-authenticator
-sudo echo `auth required pam_google_authenticator.so` >> /etc/pam.d/sshd
-sudo echo `#@include common-auth` >> /etc/pam.d/sshd
+cat << EOF | sudo tee /etc/pam.d/sshd
+auth required pam_google_authenticator.so
+EOF
+cat << EOF | sudo tee /etc/pam.d/sshd
+#@include common-auth
+EOF
 ```
 
 * Restreindre l'accès SSH au certificat pour le user en s'inspirant du [tuto](https://medium.com/@jasonrigden/hardening-ssh-1bcb99cd4cef):
@@ -108,16 +112,20 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 ```shell
 sudo apt install fail2ban clamav clamav-daemon
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-sudo echo `[sshd]
+cat << EOF | sudo tee /etc/fail2ban/jail.local
+[sshd]
 enabled  = true
 port    = ssh
-logpath = %(sshd_log)s` >> /etc/fail2ban/jail.local
+logpath = %(sshd_log)s
+EOF
 ```
 
 * Sécuriser la mémoire partagée:
 
 ```shell
-sudo echo 'tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0' >> /etc/fstab
+cat << EOF | sudo tee /etc/fstab
+tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0
+EOF
 ```
 
 * Changer le timezone: `sudo timedatectl set-timezone Europe/Paris`
@@ -136,6 +144,17 @@ sudo swapoff -a
 * Installer le Container runtime [Docker](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker)
 * Installer [runc](https://github.com/opencontainers/runc): `sudo apt install runc`, pour corriger le [Bug](https://github.com/kubernetes/kubernetes/issues/76531), installer ce [fix de runc](https://github.com/youurayy/runc/releases/tag/v1.0.0-rc8-slice-fix-2).
 * Installer [kubeadm](https://kubernetes.io/fr/docs/setup/independent/install-kubeadm/)
+* Contourner le [bug](https://github.com/kubernetes/kubernetes/issues/56850):
+
+```shell
+cat << EOF | sudo tee /etc/systemd/system/kubelet.service.d/12-after-docker.conf
+[Unit]
+After=docker.service
+EOF
+```
+
+* Le [message](https://github.com/kubernetes/kubernetes/issues/71887) inoffensif demeure.
+
 * [Création](https://kubernetes.io/fr/docs/setup/independent/create-cluster-kubeadm/) du cluster: `sudo kubeadm init --pod-network-cidr=192.168.0.0/16`
 * Installation du CNI [Calico](https://docs.projectcalico.org/v3.8/getting-started/kubernetes/):
 
@@ -143,7 +162,7 @@ sudo swapoff -a
 kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
 ```
 
-* Créer le stockage local sur le single node `rieau.cohesion-territoires.gouv.fr`:
+* Créer la classe de stockage local sur le single node `rieau.cohesion-territoires.gouv.fr`:
 
 ```shell
 mkdir -p $HOME/data
@@ -213,3 +232,11 @@ Test:
 ```shell
 helm ls --tls --tiller-namespace rieau
 ```
+
+* Le [reverse proxy](reverse-proxy/README)
+
+* Le [SSO](sso/README)
+
+* Le [Mail server](mail/README)
+
+* L'[application](app/README)

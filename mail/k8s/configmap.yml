@@ -5,12 +5,17 @@ metadata:
   labels:
     app: mailserver
 data:
+  postfix-accounts.cf: |
+    user1@example.com| <password>
+
+  postfix-virtual.cf: |
+    alias1@example.com user1@dexample.com
 
   SigningTable: |
     *@rieau.cohesion-territoires.gouv.fr mail._domainkey.rieau.cohesion-territoires.gouv.fr
 
   KeyTable: |
-    mail._domainkey.rieau.cohesion-territoires.gouv.fr rieau.cohesion-territoires.gouv.fr:mail:/etc/opendkim/keys/rieau-mail.key
+    mail._domainkey.rieau.cohesion-territoires.gouv.fr rieau.cohesion-territoires.gouv.fr:mail:/etc/opendkim/keys/mail.private
 
   TrustedHosts: |
     127.0.0.1

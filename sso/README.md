@@ -32,7 +32,8 @@ L'administration du SSO est disponible sur [rieau.docker.localhost/auth](https:/
 Installer le stockage local:
 
 ```shell
-kubectl create -f k8s/pv-claims.yml
+mkdir -p $HOME/data/keycloak/db
+kubectl create -f k8s/pv-claims.yml -f k8s/pv-local.yml
 ```
 
 Importer le realm-rieau.json en secret:
@@ -52,11 +53,11 @@ Installer le [chart](https://github.com/codecentric/helm-charts/tree/master/char
 ```shell
 helm install \
 --name keycloak codecentric/keycloak \
---values k8s/helm-values.yml \
+--values sso/helm-values.yml \
 --tls \
 --tiller-namespace rieau \
---set-string postgresql.postgresqlPassword='<secret-password>' \
---set-string keycloak.password='<secret-password>'
+--set-string postgresql.postgresqlPassword='<password>' \
+--set-string keycloak.password='<password>'
 ```
 
 Pour récupérer le mot de passe de admin initialisé au départ:
@@ -70,3 +71,5 @@ Mettre à jour des values:
 ```shell
 helm upgrade --tls --tiller-namespace rieau --set <key>=<value> -f sso/helm-values.yml keycloak codecentric/keycloak
 ```
+
+Voir [l'aide](https://helm.sh/docs/helm/#helm-upgrade) notamment pour les caractères d'échappement.

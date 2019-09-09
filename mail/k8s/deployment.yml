@@ -12,9 +12,6 @@ spec:
       labels:
         app: mailserver
     spec:
-      nodeSelector:
-        has/mail-server: 'true'
-      subdomain: mailserver
       containers:
         - name: mailserver
           image: tvial/docker-mailserver
@@ -23,9 +20,23 @@ spec:
               containerPort: 25
             - name: smtp-auth
               containerPort: 587
+            - name: smtp-tls
+              containerPort: 465
           env:
             - name: ONE_DIR
               value: '1'
+            - name: DMS_DEBUG
+              value: '1'
+            - name: PERMIT_DOCKER
+              value: 'connected-networks'
+            - name: OVERRIDE_HOSTNAME
+              value: 'rieau.cohesion-territoires.gouv.fr'
+            - name: SSL_TYPE
+              value: 'manual'
+            - name: SSL_CERT_PATH
+              value: '/etc/ssl/mailserver/tls.crt'
+            - name: SSL_KEY_PATH
+              value: '/etc/ssl/mailserver/tls.key'
           volumeMounts:
             - name: config
               subPath: postfix-accounts.cf
@@ -54,6 +65,9 @@ spec:
               mountPath: /var/mail
             - name: state
               mountPath: /var/mail-state
+            - name: tls
+              mountPath: /etc/ssl/mailserver
+              readOnly: true
       volumes:
         - name: config
           configMap:
@@ -61,12 +75,12 @@ spec:
         - name: opendkim-keys
           secret:
             secretName: mailserver.opendkim.keys
-        - name: mail-user-secret
-          secret:
-            secretName: mail-user-secret
         - name: data
           persistentVolumeClaim:
             claimName: mail-data
         - name: state
           persistentVolumeClaim:
             claimName: mail-state-data
+        - name: tls
+          secret:
+            secretName: rieau-cert

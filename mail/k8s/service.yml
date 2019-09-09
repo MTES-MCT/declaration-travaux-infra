@@ -10,7 +10,12 @@ spec:
   ports:
     - name: smtp
       port: 25
-      targetPort: smtp
+      targetPort: smtp    
     - name: smtp-auth
       port: 587
       targetPort: smtp-auth
+    - name: smtp-tls
+      port: 465
+      targetPort: smtp-tls
+  externalIPs: 
+    - 94.23.208.200 
