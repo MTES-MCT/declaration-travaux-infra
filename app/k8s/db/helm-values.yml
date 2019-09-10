@@ -1,0 +1,7 @@
+global:
+  postgresql:
+    postgresqlDatabase: rieau
+    postgresqlUsername: rieau
+persistence:
+  enabled: true
+  existingClaim: app-db-data  

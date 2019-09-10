@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+  name: api
+spec:
+  rules:
+  - host: rieau.cohesion-territoires.gouv.fr
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: api
+          servicePort: api
+  tls:
+  - secretName: rieau-cert

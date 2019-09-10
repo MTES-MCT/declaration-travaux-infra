@@ -1,0 +1,84 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: ui
+  labels:
+    app: rieau
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rieau
+      task: ui
+  template:
+    metadata:
+      labels:
+        app: rieau
+        task: ui
+    spec:
+      containers:
+        - name: rieau-ui
+          image: tristanrobert/rieau-ui:0.1.1
+          ports:
+            - name: ui
+              containerPort: 3000
+          env:
+            - name: SERVER_PORT
+              value: '3000'
+            - name: REACT_APP_API_MOCK
+              value: '0'
+            - name: REACT_APP_BASENAME
+              value: '/'
+            - name: PUBLIC_URL
+              value: 'https://rieau.cohesion-territoires.gouv.fr'
+            - name: REACT_APP_API_URL
+              value: 'https://rieau.cohesion-territoires.gouv.fr/api'
+            - name: REACT_APP_SSO_APP_URL
+              value: 'https://rieau.cohesion-territoires.gouv.fr/auth'
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: api
+  labels:
+    app: rieau
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rieau
+      task: api
+  template:
+    metadata:
+      labels:
+        app: rieau
+        task: api
+    spec:
+      containers:
+        - name: rieau-api
+          image: tristanrobert/rieau-api:0.1.1
+          ports:
+            - name: api
+              containerPort: 5000
+          env:
+            - name: spring.datasource.password
+              valueFrom:
+                secretKeyRef:
+                  name: app-db-secret
+                  key: password
+            - name: keycloak.credentials.secret
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-app-secret
+                  key: secret
+          volumeMounts:
+            - name: config-app
+              subPath: application.properties
+              mountPath: /app/config/application-staging.properties
+              readOnly: true
+      volumes:
+        - name: config-app
+          configMap:
+            name: config-app

@@ -1,0 +1,29 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: demo
+  labels:
+    app: demo
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - name: demo
+          image: tristanrobert/rieau-ui
+          ports:
+            - name: demo
+              containerPort: 3000
+          env:
+            - name: SERVER_PORT
+              value: '3000'
+            - name: REACT_APP_API_MOCK
+              value: '1'
+            - name: REACT_APP_BASENAME
+              value: '/demo'
+            - name: PUBLIC_URL
+              value: 'https://rieau.cohesion-territoires.gouv.fr/demo'

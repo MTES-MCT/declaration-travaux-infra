@@ -64,8 +64,42 @@ curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.loca
 
 * Sélectionner le contexte du namespace: `kubens rieau`
 
+* Installer le stockage local:
+
+```shell
+mkdir -p $HOME/data/app/db
+mkdir -p $HOME/data/app/files
+kubectl create -f app/storage/
+```
+
+* Installer la base de données avec Helm:
+
+```shell
+helm install --name db stable/postgresql --tls --tiller-namespace rieau --values app/db/helm-values.yml --set-string postgresqlPassword='qw2JmJdTnGXqZAjNSDTd' --set-string global.postgresql.postgresqlPassword='xXrio6gDdv2mfHQP53iZ'
+```
+
+* Pour se connecter à la base de données:
+
+```shell
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace rieau db-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+kubectl run db-postgresql-client --rm --tty -i --restart='Never' --namespace rieau --image docker.io/bitnami/postgresql:11.5.0-debian-9-r26 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host db-postgresql -U postgres -p 5432
+```
+
+* Générer les secrets d'accès à la base de données et à keycloak:
+
+```shell
+kubectl create secret generic app-db-secret --from-literal=username=rieau --from-literal=password='<password>'
+kubectl create secret generic keycloak-app-secret --from-literal=secret='<secret>'
+```
+
 * Installer l'application avec les manifests:
 
 ```shell
-kubectl create -f app/
+kubectl create -f app/app/
+```
+
+* Installer la demo avec les manifests:
+
+```shell
+kubectl create -f app/demo/
 ```
