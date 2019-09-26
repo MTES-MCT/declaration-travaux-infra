@@ -1,0 +1,4 @@
+existingSecret: minio-app-secret
+persistence:
+  enabled: true
+  existingClaim: app-files-data 

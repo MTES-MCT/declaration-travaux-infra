@@ -1,9 +1,30 @@
-#Active profiles
-spring.profiles.active=staging
+# Profiles
+spring.profiles.active=@spring.profiles.active@
+spring-boot.run.profiles=@spring-boot.run.profiles@
+
+#Dates
+app.date-format=dd/MM/yyyy
+app.datetime-format=dd/MM/yyyy HH:mm:ss
+spring.jackson.date-format=${app.date-format}
+spring.jackson.time-zone=Europe/Paris
+
+# File upload
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.max-file-size=20MB
+
+#JMX
+spring.jmx.enabled=false
+
+#Logging
+logging.level.root = info
+logging.level.com.github.mtesmct.rieau = debug
+logging.level.org.springframework.security = info
+# logging.level.org.hibernate.type=trace
 
 # Persistence
+spring.jpa.open-in-view=false
 spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=jdbc:postgresql://db:5432/rieau
+spring.datasource.url=jdbc:postgresql://localhost:5432/rieau
 spring.datasource.username=rieau
 spring.datasource.password=
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
@@ -13,17 +34,23 @@ spring.jpa.generate-ddl=false
 spring.flyway.enabled=true
 spring.flyway.locations=classpath:db/migration/{vendor}
 
-#Logging
-logging.level.root = info
-logging.level.com.github.mtesmct.rieau = debug
-# logging.level.org.hibernate.type=trace
-
 #Security
 keycloak.enabled = true
 keycloak.principal-attribute=preferred_username
 keycloak.realm = rieau
-keycloak.auth-server-url = https://rieau.cohesion-territoires.gouv.fr/auth
+keycloak.auth-server-url = http://localhost:8080/auth
 keycloak.ssl-required = external
 keycloak.resource = rieau-api
 keycloak.credentials.secret = 
 keycloak.use-resource-role-mappings = true
+
+# Fichiers
+minio.enabled = true
+minio.endpoint=http://localhost:9000
+minio.access-key=
+minio.secret-key=
+minio.bucket=rieau
+minio.buffer=4096
+
+# HTTP server
+server.port=5000

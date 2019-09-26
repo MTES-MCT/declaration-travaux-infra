@@ -73,10 +73,20 @@ spec:
                 secretKeyRef:
                   name: keycloak-app-secret
                   key: secret
+            - name: minio.access-key
+              valueFrom:
+                secretKeyRef:
+                  name: minio-app-secret
+                  key: accessKey
+            - name: minio.secret-key
+              valueFrom:
+                secretKeyRef:
+                  name: minio-app-secret
+                  key: secretKey
           volumeMounts:
             - name: config-app
               subPath: application.properties
-              mountPath: /app/config/application-staging.properties
+              mountPath: /app/config/application.properties
               readOnly: true
       volumes:
         - name: config-app

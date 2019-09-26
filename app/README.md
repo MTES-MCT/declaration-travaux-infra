@@ -57,7 +57,7 @@ KC_REFRESH_TOKEN=$(echo $KC_RESPONSE| jq -r .refresh_token)
 Test d'une ressource, par exemple `/depots`:
 
 ```shell
-curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.localhost/api/depots
+curl -k -H "Authorization: Bearer $KC_ACCESS_TOKEN" -v https://rieau.docker.localhost/api/dossiers
 ```
 
 ### En prod
@@ -75,7 +75,7 @@ kubectl create -f app/storage/
 * Installer la base de données avec Helm:
 
 ```shell
-helm install --name db stable/postgresql --tls --tiller-namespace rieau --values app/db/helm-values.yml --set-string postgresqlPassword='qw2JmJdTnGXqZAjNSDTd' --set-string global.postgresql.postgresqlPassword='xXrio6gDdv2mfHQP53iZ'
+helm install --name db stable/postgresql --tls --tiller-namespace rieau --values app/db/helm-values.yml --set-string postgresqlPassword='<secret>' --set-string global.postgresql.postgresqlPassword='<secret>'
 ```
 
 * Pour se connecter à la base de données:
@@ -90,6 +90,13 @@ kubectl run db-postgresql-client --rm --tty -i --restart='Never' --namespace rie
 ```shell
 kubectl create secret generic app-db-secret --from-literal=username=rieau --from-literal=password='<password>'
 kubectl create secret generic keycloak-app-secret --from-literal=secret='<secret>'
+kubectl create secret generic minio-app-secret --from-literal=accesskey='<secret>' --from-literal=secretkey='<secret>'
+```
+
+* Installer le serveur de fichiers Minio avec Helm:
+
+```shell
+helm install --name minio stable/minio --tls --tiller-namespace rieau --values app/files/helm-values.yml
 ```
 
 * Installer l'application avec les manifests:
