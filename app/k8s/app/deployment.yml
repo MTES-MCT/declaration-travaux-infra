@@ -88,6 +88,10 @@ spec:
               subPath: application.properties
               mountPath: /app/config/application.properties
               readOnly: true
+            - name: config-sso-app
+              subPath: keycloak.json
+              mountPath: /app/config/keycloak.json
+              readOnly: true
       volumes:
         - name: config-app
           configMap:

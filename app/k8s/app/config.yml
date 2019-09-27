@@ -55,3 +55,15 @@ data:
     minio.secret-key=
     minio.bucket=rieau
     minio.buffer=4096
+
+  keycloak.json: |
+    {
+      "realm": "rieau",
+      "bearer-only": true,
+      "auth-server-url": "http://localhost:8080/auth",
+      "ssl-required": "external",
+      "resource": "rieau-api",
+      "credentials": {
+        "secret": "secret"
+      }
+    }
