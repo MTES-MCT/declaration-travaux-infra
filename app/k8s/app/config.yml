@@ -47,6 +47,8 @@ data:
     keycloak.resource = rieau-api
     keycloak.credentials.secret = 
     keycloak.use-resource-role-mappings = true
+    keycloak.bearer-only = true
+    app.cors-allowed-origins=http://localhost:3000
 
     # Fichiers
     minio.enabled = true

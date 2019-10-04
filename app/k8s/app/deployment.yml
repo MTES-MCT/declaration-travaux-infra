@@ -77,12 +77,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: minio-app-secret
-                  key: accessKey
+                  key: accesskey
             - name: minio.secret-key
               valueFrom:
                 secretKeyRef:
                   name: minio-app-secret
-                  key: secretKey
+                  key: secretkey
           volumeMounts:
             - name: config-app
               subPath: application.properties
