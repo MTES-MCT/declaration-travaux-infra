@@ -44,10 +44,8 @@ data:
     keycloak.realm = rieau
     keycloak.auth-server-url = http://localhost:8080/auth
     keycloak.ssl-required = external
-    keycloak.resource = rieau-api
-    keycloak.credentials.secret = 
+    keycloak.resource = rieau
     keycloak.use-resource-role-mappings = true
-    keycloak.bearer-only = true
     app.cors-allowed-origins=http://localhost:3000
 
     # Fichiers
@@ -57,3 +55,17 @@ data:
     minio.secret-key=
     minio.bucket=rieau
     minio.buffer=4096
+
+    # HTTP server
+    server.port=5000
+    
+    # Communes
+    app.communes-url=app.communes-url=https://geo.api.gouv.fr/communes?codePostal={codePostal}&fields=nom,code,codeDepartement,codeRegion&format=json&geometry=centre
+
+    # Timeout en ms
+    app.http-timeout=200
+
+    # Proxy
+    app.proxy-host=
+    app.proxy-port=
+    app.proxy-scheme=
