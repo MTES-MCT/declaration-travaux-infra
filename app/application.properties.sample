@@ -4,7 +4,9 @@ spring-boot.run.profiles=@spring-boot.run.profiles@
 
 #Dates
 app.date-format=dd/MM/yyyy
+app.year-format=yyyy
 app.datetime-format=dd/MM/yyyy HH:mm:ss
+app.all-datetime-format=[dd/MM/]yyyy[ HH:mm:ss]
 spring.jackson.date-format=${app.date-format}
 spring.jackson.time-zone=Europe/Paris
 
