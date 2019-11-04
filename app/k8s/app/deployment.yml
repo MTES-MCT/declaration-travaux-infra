@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: rieau-ui
-          image: tristanrobert/rieau-ui:0.4.0
+          image: tristanrobert/rieau-ui:0.4.1
           ports:
             - name: ui
               containerPort: 3000
